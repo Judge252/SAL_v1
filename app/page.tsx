@@ -55,16 +55,16 @@ export default async function Home({
       body: t(
         locale,
         "No need to know the specialty. Just tell SAL what’s on your mind.",
-        "لا تحتاج لمعرفة التخصص. أخبر سال بما يقلقك.",
+        "لا تحتاج إلى معرفة التخصص مسبقًا. أخبر سال بما يقلقك.",
       ),
     },
     {
       icon: MessagesSquare,
-      title: t(locale, "Make sense of the details.", "نفهم التفاصيل معاً."),
+      title: t(locale, "Make sense of the details.", "نفهم التفاصيل معًا."),
       body: t(
         locale,
         "A few thoughtful questions help SAL understand your concern.",
-        "بعض الأسئلة المفيدة تساعد سال على فهم ما يزعجك.",
+        "يسألك سال أسئلة بسيطة ليساعدك على توضيح ما تشعر به.",
       ),
     },
     {
@@ -73,7 +73,7 @@ export default async function Home({
       body: t(
         locale,
         "Explore the right kind of care and matching doctors in our directory.",
-        "استكشف نوع الرعاية المناسب والأطباء المطابقين في دليلنا.",
+        "تعرّف على الرعاية التي قد تناسبك، واستكشف الأطباء في دليلنا.",
       ),
     },
     {
@@ -82,7 +82,7 @@ export default async function Home({
       body: t(
         locale,
         "Choose a doctor and an available time. Your appointment, in one place.",
-        "اختر طبيباً ووقتاً متاحاً. موعدك في مكان واحد.",
+        "اختر طبيبًا ووقتًا متاحًا. موعدك في مكان واحد.",
       ),
     },
   ];
@@ -102,7 +102,7 @@ export default async function Home({
         <div className="container journey-inner">
           {[
             [
-              t(locale, "Talk", "تحدث"),
+              t(locale, "Talk", "تحدّث"),
               t(locale, "Start with what you feel", "ابدأ بما تشعر به"),
             ],
             [
@@ -110,7 +110,7 @@ export default async function Home({
               t(locale, "Find a little clarity", "احصل على وضوح أكثر"),
             ],
             [
-              t(locale, "Find care", "جد الرعاية"),
+              t(locale, "Find care", "ابحث عن الرعاية"),
               t(
                 locale,
                 "Meet the right kind of doctor",
@@ -149,7 +149,7 @@ export default async function Home({
               {t(
                 locale,
                 "Healthcare can feel complicated. Finding where to begin shouldn’t be. SAL helps you turn a concern into a thoughtful next step.",
-                "قد تبدو الرعاية الصحية معقدة. لكن معرفة من أين تبدأ يجب أن تكون سهلة. سال يساعدك على تحويل ما يقلقك إلى خطوة واضحة.",
+                "قد تبدو الرعاية الصحية معقّدة، لكن خطوتك الأولى يمكن أن تكون واضحة. يساعدك سال على فهم ما يقلقك واستكشاف الخطوة المناسبة.",
               )}
             </p>
             <Link href="/sal" className="text-link">
@@ -194,7 +194,7 @@ export default async function Home({
               {t(
                 locale,
                 "Between feeling something is wrong and knowing what to do next. That’s where SAL helps.",
-                "بين الشعور بأن هناك مشكلة، ومعرفة ماذا تفعل بعدها. هنا يساعدك سال.",
+                "بين القلق على صحتك ومعرفة الخطوة التالية، يساعدك سال على رؤية الطريق بوضوح.",
               )}
             </p>
           </div>
@@ -237,7 +237,7 @@ export default async function Home({
               placeholder={t(
                 locale,
                 "Search a doctor, specialty, or concern",
-                "ابحث عن طبيب، تخصص، أو ما يقلقك",
+                "ابحث عن طبيب أو تخصص أو ما يقلقك",
               )}
               maxLength={100}
             />
@@ -281,7 +281,7 @@ export default async function Home({
                 {t(
                   locale,
                   "You can still talk to SAL to explore an appropriate next step.",
-                  "يمكنك التحدث مع سال لاستكشاف الخطوة المناسبة.",
+                  "يمكنك التحدّث مع سال لاستكشاف الخطوة المناسبة.",
                 )}
               </p>
               <LinkButton href="/doctors" variant="secondary">
@@ -367,7 +367,7 @@ export default async function Home({
               )}
             </p>
             <LinkButton href="/sal" className="button-sal" arrow>
-              {t(locale, "Talk to SAL", "تحدث مع سال")}
+              {t(locale, "Talk to SAL", "تحدّث مع سال")}
             </LinkButton>
           </div>
           <SalMascot size={300} />

@@ -177,7 +177,7 @@ for (const locale of ["en", "ar"] as const)
     await page
       .getByLabel(
         locale === "ar"
-          ? "بماذا تريد المساعدة؟"
+          ? "ما الذي تودّ مناقشته مع الطبيب؟"
           : "What would you like help with?",
         { exact: true },
       )
@@ -190,7 +190,7 @@ for (const locale of ["en", "ar"] as const)
       .click();
     await page
       .getByRole("button", {
-        name: locale === "ar" ? "أكد الموعد" : "Confirm appointment",
+        name: locale === "ar" ? "أكّد الموعد" : "Confirm appointment",
         exact: true,
       })
       .click();
@@ -211,7 +211,7 @@ for (const locale of ["en", "ar"] as const)
     await expect(
       page.getByLabel(
         locale === "ar"
-          ? "بماذا تريد المساعدة؟"
+          ? "ما الذي تودّ مناقشته مع الطبيب؟"
           : "What would you like help with?",
         { exact: true },
       ),

@@ -14,14 +14,14 @@ export default async function SpecialtiesPage() {
     <div className="container page-shell">
       <div className="page-heading">
         <span className="eyebrow">
-          {t(locale, "Find your kind of care", "جد نوع الرعاية المناسب")}
+          {t(locale, "Find your kind of care", "اكتشف الرعاية المناسبة لك")}
         </span>
         <h1>{t(locale, "Start with a specialty.", "ابدأ بتخصص.")}</h1>
         <p>
           {t(
             locale,
             "Not sure which one fits? Tell SAL what you’re feeling, and explore your next step together.",
-            "لست متأكداً من التخصص المناسب؟ أخبر سال بما تشعر به لتستكشفا الخطوة التالية معاً.",
+            "لست متأكداً من التخصص المناسب؟ أخبر سال بما تشعر به لتستكشفا الخطوة التالية معًا.",
           )}
         </p>
         <LinkButton href="/sal" variant="secondary" className="mt-5">

@@ -14,26 +14,27 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 124px 24px 35px;
-  min-height: min(850px, 100svh);
+  padding: 120px 32px 56px;
+  min-height: min(960px, 100svh);
   isolation: isolate;
 }
 .voice-page .voice-stage {
-  padding-top: 118px;
+  padding-top: 190px;
 }
 .voice-companion {
   margin-bottom: 0 !important;
-  font-size: 0.67rem;
-  letter-spacing: 0.15em;
-  color: #a6cbd0;
+  font-size: var(--text-caption);
+  letter-spacing: 0.11em;
+  color: var(--on-dark-secondary);
+  font-weight: 600;
 }
 .voice-mascot-scene {
   position: relative;
   width: min(440px, 100%);
-  height: 290px;
+  height: auto;
   display: grid;
   place-items: center;
-  margin-block: 6px 10px;
+  margin-block: 24px 32px;
 }
 .voice-stage .voice-mascot {
   position: relative;
@@ -79,27 +80,30 @@
   animation: voice-shadow 7s ease-in-out infinite;
 }
 .voice-stage h1 {
-  font-size: clamp(2.7rem, 4vw, 3.6rem);
+  font-size: clamp(3rem, 5vw, 4.5rem);
   line-height: 1.08;
-  margin: 4px 0 16px;
+  margin: 0 0 24px;
+  max-width: 760px;
 }
 .voice-stage h1 span {
   display: block;
-  color: #d1e7e6;
-  font-family: var(--font-sans), Arial, sans-serif;
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 400;
+  color: var(--on-dark-secondary);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  font-weight: 500;
   line-height: 1.7;
   letter-spacing: 0;
-  margin-top: 8px;
+  margin-top: 20px;
+  max-width: 620px;
 }
 .voice-status {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.8rem;
-  color: #b7d5d6;
+  font-size: 0.9375rem;
+  color: var(--on-dark-secondary);
   min-height: 27px;
+  font-weight: 600;
 }
 .voice-status-dot {
   width: 5px;
@@ -125,7 +129,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: 5px 0 15px;
+  margin: 12px 0 28px;
 }
 .sal-waveform i {
   display: block;
@@ -144,7 +148,7 @@
   display: flex;
   align-items: center;
   gap: 25px;
-  margin-bottom: 43px;
+  margin-bottom: 48px;
 }
 .sal-mic-button {
   position: relative;
@@ -181,8 +185,8 @@
   top: calc(100% + 13px);
   min-width: 160px;
   color: #f2ffff;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 .sal-mic-button[aria-pressed="true"] {
@@ -208,7 +212,7 @@
 .voice-end-button span {
   position: absolute;
   top: calc(100% + 11px);
-  font-size: 0.73rem;
+  font-size: var(--text-caption);
 }
 .voice-text-toggle,
 .voice-small-action {
@@ -218,10 +222,11 @@
   gap: 8px;
   background: transparent;
   border: 0;
-  color: #b0cdce;
-  font-size: 0.75rem;
-  padding: 9px 8px;
-  min-height: 36px;
+  color: var(--on-dark-secondary);
+  font-size: 0.875rem;
+  padding: 10px 12px;
+  min-height: 44px;
+  font-weight: 600;
 }
 .voice-secondary-controls {
   display: flex;
@@ -236,7 +241,7 @@
 }
 .voice-page-actions {
   position: absolute;
-  top: 94px;
+  top: 108px;
   width: min(1100px, calc(100% - 48px));
   display: flex;
   justify-content: space-between;
@@ -244,18 +249,18 @@
 .voice-captions {
   width: min(590px, 100%);
   margin-top: 18px;
-  font-size: 0.88rem;
+  font-size: 1rem;
   line-height: 1.75;
 }
 .voice-captions small {
   display: block;
-  font-size: 0.6rem;
+  font-size: var(--text-caption);
   letter-spacing: 0.12em;
-  color: #8aafb4;
+  color: var(--on-dark-muted);
   margin-bottom: 3px;
 }
 .voice-caption-user {
-  color: #9fbdc1;
+  color: var(--on-dark-secondary);
   margin-bottom: 13px;
 }
 .voice-stage .voice-caption-sal {
@@ -291,10 +296,13 @@
   color: #f0fafa;
   resize: vertical;
   padding: 6px;
-  font-size: 0.87rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.75;
 }
 .voice-text-form textarea::placeholder {
-  color: #9fbfc3;
+  color: var(--on-dark-muted);
+  font-weight: 500;
 }
 .voice-text-form .button {
   background: #79dfe6;
@@ -304,23 +312,25 @@
   min-height: 42px;
 }
 .voice-text-hint {
-  color: #a0babc;
-  font-size: 0.68rem;
-  margin-top: 9px;
+  color: var(--on-dark-muted);
+  font-size: var(--text-caption);
+  margin-top: 12px;
 }
 .voice-text-summary {
   width: min(570px, 100%);
   color: #c6e0df;
-  font-size: 0.83rem;
+  font-size: 1rem;
   margin-top: 12px;
 }
 .voice-boundary {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.62rem;
-  color: #92b2b7;
-  margin-top: 23px;
+  font-size: var(--text-caption);
+  color: var(--on-dark-muted);
+  margin-top: 18px;
+  line-height: 1.75;
+  max-width: 600px;
 }
 .voice-transcript {
   width: min(620px, 100%);
@@ -330,13 +340,14 @@
 }
 .voice-transcript summary {
   cursor: pointer;
-  font-size: 0.74rem;
-  color: #a8c7ca;
+  font-size: 0.875rem;
+  color: var(--on-dark-secondary);
   padding: 13px 0;
+  font-weight: 600;
 }
 .voice-transcript summary span {
   margin-inline-start: 8px;
-  color: #789da0;
+  color: var(--on-dark-muted);
 }
 .voice-transcript .conversation-log {
   padding: 14px 0;
@@ -358,11 +369,11 @@
 }
 .voice-transcript small {
   display: block;
-  font-size: 0.65rem;
-  color: #a4c3c5;
+  font-size: var(--text-caption);
+  color: var(--on-dark-muted);
 }
 .voice-transcript p {
-  font-size: 0.86rem;
+  font-size: 1rem;
   white-space: pre-wrap;
 }
 .voice-error {
@@ -382,9 +393,10 @@
 }
 .voice-urgent h1 {
   font-size: 1.5rem;
-  font-family: var(--font-sans), Arial, sans-serif;
+  font-family: var(--font-heading);
   margin: 0 0 8px;
   line-height: 1.4;
+  font-weight: 600;
 }
 .voice-stage .voice-urgent-scene {
   height: 150px;
@@ -402,7 +414,7 @@
 .voice-recommendations {
   background: var(--canvas);
   color: var(--ink);
-  padding: 42px max(24px, calc((100vw - 1140px) / 2)) 60px;
+  padding: 56px max(24px, calc((100vw - 1140px) / 2)) 72px;
 }
 .voice-recommendation-heading {
   display: flex;
@@ -420,7 +432,7 @@
 .doctor-next-slot {
   line-height: 1.5;
   padding-bottom: 12px;
-  font-size: 0.74rem;
+  font-size: var(--text-caption);
 }
 html[lang="ar"] .voice-stage h1 span {
   font-family: var(--font-arabic), Arial, sans-serif;
@@ -466,35 +478,35 @@ html[lang="ar"] .voice-stage h1 span {
 }
 @media (max-width: 700px) {
   .voice-stage {
-    padding: 112px 22px 29px;
-    min-height: calc(100svh - 8px);
+    padding: 116px 22px 48px;
+    min-height: 100svh;
   }
   .voice-page .voice-stage {
-    padding-top: 132px;
+    padding-top: 176px;
   }
   .voice-mascot-scene {
-    height: clamp(200px, 37svh, 275px);
-    margin-block: 3px 8px;
+    height: auto;
+    margin-block: 40px;
   }
   .voice-stage .voice-mascot {
-    width: min(360px, 105%) !important;
+    width: min(360px, 100%) !important;
   }
   .voice-stage h1 {
-    font-size: 2.6rem;
-    margin-bottom: 12px;
+    font-size: clamp(3rem, 8vw, 3.5rem);
+    margin-bottom: 24px;
   }
   .voice-stage h1 span {
-    font-size: 0.94rem;
-    margin-top: 7px;
+    font-size: 1rem;
+    margin-top: 20px;
   }
   .voice-companion {
-    font-size: 0.6rem;
+    font-size: var(--text-caption);
   }
   .voice-status {
-    font-size: 0.72rem;
+    font-size: 0.9375rem;
   }
   .sal-waveform {
-    margin-block: 3px 12px;
+    margin-block: 12px 28px;
   }
   .sal-mic-button.start-call {
     width: 90px;
@@ -505,8 +517,8 @@ html[lang="ar"] .voice-stage h1 span {
     height: 80px;
   }
   .voice-page-actions {
-    top: 87px;
-    width: calc(100% - 32px);
+    top: 94px;
+    width: calc(100% - 40px);
   }
   .voice-recommendation-heading {
     flex-direction: column;
@@ -514,37 +526,14 @@ html[lang="ar"] .voice-stage h1 span {
   }
   .voice-boundary {
     align-items: flex-start;
-    font-size: 0.58rem;
-    max-width: 300px;
+    font-size: var(--text-caption);
+    max-width: 560px;
   }
   .voice-call-controls {
-    margin-bottom: 39px;
+    margin-bottom: 48px;
   }
   .voice-recommendations {
     padding: 32px 20px 40px;
-  }
-}
-@media (max-height: 750px) and (max-width: 700px) {
-  .voice-stage {
-    padding-top: 98px;
-  }
-  .voice-page .voice-stage {
-    padding-top: 122px;
-  }
-  .voice-mascot-scene {
-    height: 175px;
-  }
-  .voice-stage .voice-mascot {
-    width: 255px !important;
-  }
-  .voice-stage h1 {
-    font-size: 2.25rem;
-  }
-  .voice-stage h1 span {
-    font-size: 0.86rem;
-  }
-  .voice-companion {
-    margin-bottom: 4px !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -582,10 +571,27 @@ html[lang="ar"] .voice-stage h1 span {
   --surface: #eef1ec;
   --border: #dce3de;
   --muted: #63736d;
+  --on-dark-secondary: #d8e8e8;
+  --on-dark-muted: #b8cfd1;
+  --text-caption: 0.8125rem;
+  --font-body: var(--font-sans), Arial, sans-serif;
+  --font-heading: var(--font-sans), Arial, sans-serif;
+  --font-marketing: var(--font-display), Georgia, serif;
+  --weight-heading: 600;
+  --weight-marketing: 400;
+  --heading-tracking: -0.02em;
   --danger: #a93239;
   --success: #286846;
   --radius: 12px;
   --shadow: 0 1px 2px #183d2c06, 0 4px 9px #183d2c04, 0 10px 22px #183d2c03;
+}
+html[lang="ar"] {
+  --font-body: var(--font-arabic), Arial, sans-serif;
+  --font-heading: var(--font-arabic-display), Arial, sans-serif;
+  --font-marketing: var(--font-arabic-display), Arial, sans-serif;
+  --weight-heading: 650;
+  --weight-marketing: 650;
+  --heading-tracking: 0;
 }
 * {
   box-sizing: border-box;
@@ -598,20 +604,23 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--canvas);
-  font-family: var(--font-sans), Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
+  font-weight: 500;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
 html[lang="ar"] body {
-  font-family: var(--font-arabic), Arial, sans-serif;
+  line-height: 1.75;
 }
 html[lang="ar"] h1,
 html[lang="ar"] h2,
+html[lang="ar"] h3,
 html[lang="ar"] .display {
-  font-family: var(--font-arabic), Arial, sans-serif;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
   letter-spacing: 0;
-  line-height: 1.45;
+  line-height: 1.3;
 }
 a {
   color: inherit;
@@ -661,24 +670,92 @@ p {
 h1,
 h2,
 .display {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
+  letter-spacing: var(--heading-tracking);
+  line-height: 1.25;
 }
 h1 {
-  font-size: clamp(2.6rem, 5.2vw, 4.75rem);
+  font-size: clamp(2rem, 4vw, 3rem);
 }
 h2 {
-  font-size: clamp(2.25rem, 3.7vw, 3.5rem);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
 }
 h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--weight-heading);
   line-height: 1.4;
 }
+.voice-stage > h1,
+.how-copy h2,
+.section-intro h2,
+.trust-inner h2,
+.final-inner h2,
+.auth-story h2 {
+  font-family: var(--font-marketing);
+  font-weight: var(--weight-marketing);
+  line-height: 1.1;
+}
+.how-copy h2,
+.section-intro h2,
+.trust-inner h2 {
+  font-size: clamp(2.5rem, 3.6vw, 3.25rem);
+}
+strong {
+  font-weight: 600;
+}
+p {
+  overflow-wrap: break-word;
+}
 small {
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
+}
+.form-field label,
+fieldset legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.input::placeholder,
+.textarea::placeholder,
+.search-inline input::placeholder {
+  color: var(--muted);
+  font-weight: 500;
+  opacity: 1;
+}
+.language-switch:lang(ar) {
+  font-family: var(--font-arabic), Arial, sans-serif;
+  letter-spacing: 0;
+}
+.language-switch:lang(en),
+bdi[lang="en"] {
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+}
+.doctor-card-head > div:last-child,
+.doctor-profile-identity > div,
+.appointment-info,
+.summary-row > span {
+  min-width: 0;
+}
+.summary-row > span:last-child {
+  max-width: 70%;
+  overflow-wrap: anywhere;
+}
+.voice-stage h1 span {
+  margin-inline: auto;
+}
+.voice-boundary {
+  width: min(600px, 100%);
+  align-items: flex-start;
+  justify-content: center;
+}
+.voice-boundary svg {
+  margin-top: 4px;
 }
 svg {
   flex-shrink: 0;
@@ -696,7 +773,7 @@ img {
   margin-inline: auto;
 }
 .section {
-  padding-block: 105px;
+  padding-block: 118px;
 }
 .section-intro {
   display: flex;
@@ -717,7 +794,7 @@ img {
   align-items: center;
   gap: 10px;
   color: var(--teal);
-  font-size: 0.76rem;
+  font-size: var(--text-caption);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 650;
@@ -816,9 +893,9 @@ img {
   padding: 5px 11px;
   border: 1px solid var(--border);
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   line-height: 1.5;
-  font-weight: 500;
+  font-weight: 600;
   background: #fff;
 }
 .badge-demo {
@@ -836,16 +913,19 @@ img {
   color: var(--muted);
 }
 .chip {
-  min-height: 38px;
+  min-height: 44px;
   padding: 7px 15px;
   border: 1px solid var(--border);
   border-radius: 9999px;
   background: white;
   color: var(--ink);
-  font-size: 0.825rem;
+  font-size: 0.875rem;
   transition:
     background 0.2s,
     border 0.2s;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
 }
 .chip:hover,
 .chip-active {
@@ -911,6 +991,7 @@ img {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  min-height: 44px;
 }
 .brand-logo {
   display: block;
@@ -921,11 +1002,12 @@ img {
   display: flex;
   align-items: center;
   gap: 28px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .desktop-nav a {
   padding-block: 12px;
-  opacity: 0.8;
+  opacity: 1;
 }
 .desktop-nav a:hover {
   opacity: 1;
@@ -934,7 +1016,8 @@ img {
   display: flex;
   align-items: center;
   gap: 20px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 .language-switch {
   background: none;
@@ -943,7 +1026,8 @@ img {
   min-height: 44px;
   min-width: 44px;
   padding: 8px 0;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 .account-link {
   display: flex;
@@ -982,7 +1066,7 @@ img {
   padding: 12px;
   border-radius: 7px;
   text-align: start;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }
 .account-dropdown a:hover,
 .account-dropdown button:hover {
@@ -1004,7 +1088,7 @@ img {
 .header-sal {
   min-height: 42px;
   padding: 10px 16px;
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
 }
 .menu-toggle {
   display: none;
@@ -1121,7 +1205,7 @@ img {
   background: #ffffff07;
   border-color: #ffffff2b;
   color: #d4e5e4;
-  font-size: 0.72rem;
+  font-size: var(--text-caption);
   padding: 6px 12px;
   min-height: 34px;
 }
@@ -1133,7 +1217,7 @@ img {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 0.68rem;
+  font-size: var(--text-caption);
   color: #b3c9c8;
   margin-top: 20px;
 }
@@ -1174,7 +1258,7 @@ img {
     0 4px 7px #002b3010,
     0 12px 25px #002b3015;
   max-width: 255px;
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
 }
 .fragment-question {
   inset-inline-end: -8px;
@@ -1184,7 +1268,7 @@ img {
 }
 .fragment-question small {
   display: block;
-  font-size: 0.63rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-bottom: 8px;
 }
@@ -1202,7 +1286,7 @@ img {
   gap: 7px;
   color: var(--teal);
   font-weight: 650;
-  font-size: 0.67rem;
+  font-size: var(--text-caption);
   margin-bottom: 7px;
 }
 .fragment-care {
@@ -1212,7 +1296,7 @@ img {
   min-width: 230px;
 }
 .fragment-care .fragment-label {
-  font-size: 0.63rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-bottom: 7px;
 }
@@ -1240,7 +1324,7 @@ img {
   inset-inline-end: 20px;
   inset-block-end: -10px;
   color: #94b5b6;
-  font-size: 0.62rem;
+  font-size: var(--text-caption);
   letter-spacing: 0.03em;
 }
 .journey-strip {
@@ -1263,7 +1347,7 @@ img {
   border: 0;
 }
 .journey-step > span {
-  font-size: 0.65rem;
+  font-size: var(--text-caption);
   color: #7b9388;
   letter-spacing: 0.05em;
 }
@@ -1274,7 +1358,7 @@ img {
 }
 .journey-step small {
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
 }
 .how-grid {
   display: grid;
@@ -1307,18 +1391,18 @@ img {
   margin-bottom: 13px;
 }
 .how-step .step-top span {
-  color: #8c9a91;
-  font-size: 0.75rem;
+  color: var(--muted);
+  font-size: var(--text-caption);
 }
 .how-step .step-top svg {
   color: var(--teal);
 }
 .how-step h3 {
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin-bottom: 9px;
 }
 .how-step p {
-  font-size: 0.86rem;
+  font-size: 1rem;
   color: var(--muted);
   line-height: 1.75;
 }
@@ -1344,17 +1428,17 @@ img {
   border-inline-end: 1px solid var(--border);
 }
 .preview-aside .eyebrow {
-  font-size: 0.68rem;
+  font-size: var(--text-caption);
   margin-bottom: 10px;
 }
 .preview-aside h3 {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: 1.1;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: var(--weight-heading);
+  line-height: 1.35;
 }
 .preview-aside .sal-mascot {
-  margin-block: 15px;
+  margin-block: 40px 32px;
 }
 .preview-tabs {
   width: 100%;
@@ -1371,8 +1455,10 @@ img {
   border: 1px solid transparent;
   border-radius: 12px;
   background: transparent;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--muted);
+  font-weight: 600;
+  min-height: 44px;
 }
 .preview-tabs button[aria-selected="true"] {
   background: white;
@@ -1381,8 +1467,8 @@ img {
   box-shadow: var(--shadow);
 }
 .preview-tabs button span {
-  font-size: 0.67rem;
-  opacity: 0.6;
+  font-size: var(--text-caption);
+  opacity: 1;
 }
 .preview-content {
   padding: 38px 48px;
@@ -1396,7 +1482,7 @@ img {
   justify-content: space-between;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
-  font-size: 0.72rem;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .preview-dialogue {
@@ -1412,7 +1498,7 @@ img {
   margin-top: 24px;
 }
 .preview-stage p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--muted);
   margin-top: 7px;
 }
@@ -1426,7 +1512,7 @@ img {
   gap: 18px;
 }
 .preview-bottom > span {
-  font-size: 0.72rem;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .discovery {
@@ -1455,7 +1541,7 @@ img {
   border: 0;
   outline: 0;
   background: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 .specialty-links {
   display: flex;
@@ -1497,11 +1583,12 @@ img {
   background: #f0f3ee;
   display: grid;
   place-items: center;
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-size: 1.7rem;
   color: #55776a;
   overflow: hidden;
   flex-shrink: 0;
+  font-weight: 600;
 }
 .doctor-avatar img {
   object-fit: cover;
@@ -1509,35 +1596,40 @@ img {
   height: 100%;
 }
 .doctor-card h3 {
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 700;
 }
 .doctor-specialty {
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   color: var(--teal);
   margin-top: 3px;
+  font-weight: 600;
 }
 .doctor-meta {
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 0.77rem;
+  font-size: 0.875rem;
   margin-bottom: 8px;
 }
 .doctor-price {
   margin-top: 15px;
   padding-block: 14px;
   border-top: 1px solid var(--border);
-  font-size: 0.9rem;
+  font-size: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  font-weight: 600;
+  flex-wrap: wrap;
 }
 .doctor-price small {
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
   color: var(--muted);
+  font-weight: 500;
 }
 .doctor-actions {
   display: flex;
@@ -1547,8 +1639,8 @@ img {
 .doctor-actions .button {
   flex: 1;
   padding-inline: 8px;
-  font-size: 0.78rem;
-  min-height: 42px;
+  font-size: 0.875rem;
+  min-height: 44px;
 }
 .doctor-card .badge {
   margin-bottom: 15px;
@@ -1575,17 +1667,17 @@ img {
   margin-bottom: 16px;
 }
 .trust-point h3 {
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin-bottom: 9px;
 }
 .trust-point p {
-  font-size: 0.86rem;
-  color: #63796e;
+  font-size: 1rem;
+  color: var(--muted);
 }
 .trust-note {
   grid-column: 1/-1;
-  font-size: 0.8rem;
-  color: #61786b;
+  font-size: 0.875rem;
+  color: var(--muted);
   padding-top: 20px;
   border-top: 1px solid #c9dacf;
 }
@@ -1600,7 +1692,7 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 50px;
-  padding-block: 60px;
+  padding-block: 72px;
   min-height: 330px;
 }
 .final-inner h2 {
@@ -1608,11 +1700,11 @@ img {
   max-width: 700px;
 }
 .final-inner p {
-  color: #a9c4c4;
+  color: var(--on-dark-secondary);
   margin-block: 14px 25px;
 }
 .final-inner .sal-mascot {
-  margin-block: -65px;
+  margin-block: -36px;
   flex-shrink: 0;
 }
 .site-footer {
@@ -1634,13 +1726,15 @@ img {
 }
 .footer-main p {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   margin-top: 12px;
+  max-width: 55ch;
 }
 .footer-main nav {
   display: flex;
   gap: 32px;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 .footer-bottom {
   border-top: 1px solid var(--border);
@@ -1650,7 +1744,7 @@ img {
   gap: 30px;
   padding-block: 22px;
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: var(--text-caption);
 }
 .footer-bottom > div {
   display: flex;
@@ -1664,12 +1758,13 @@ img {
   margin-bottom: 36px;
 }
 .page-heading h1 {
-  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  font-size: clamp(2.25rem, 4.2vw, 3rem);
   margin-bottom: 15px;
 }
 .page-heading p {
-  max-width: 650px;
+  max-width: 620px;
   color: var(--muted);
+  font-size: 1rem;
 }
 .page-topline {
   display: flex;
@@ -1686,8 +1781,9 @@ img {
   background: white;
   border-radius: 12px;
   padding: 12px 14px;
-  min-height: 46px;
-  font-size: 0.9rem;
+  min-height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
 }
 .input:focus,
 .textarea:focus,
@@ -1697,13 +1793,13 @@ img {
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  font-size: 0.82rem;
+  gap: 8px;
+  font-size: 0.875rem;
   color: var(--ink);
 }
 .form-field small {
   color: var(--muted);
-  font-size: 0.73rem;
+  font-size: var(--text-caption);
 }
 .form-grid {
   display: grid;
@@ -1739,13 +1835,13 @@ img {
   background: #fff9;
 }
 .empty-state h3 {
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin-bottom: 8px;
 }
 .empty-state p {
   color: var(--muted);
-  font-size: 0.86rem;
-  max-width: 420px;
+  font-size: 1rem;
+  max-width: 55ch;
   margin: 0 auto 16px;
 }
 .skeleton {
@@ -1800,21 +1896,22 @@ img {
   max-width: 440px;
 }
 .auth-story h2 {
-  font-size: 3.8rem;
+  font-size: 3.25rem;
 }
 .auth-story p {
   color: var(--muted);
   margin-top: 24px;
 }
 .auth-story .sal-mascot {
-  margin: 20px auto 0;
+  margin: 40px auto 0;
 }
 .auth-card {
   padding: 38px;
 }
 .auth-card h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 8px;
+  line-height: 1.3;
 }
 .auth-card .form-grid {
   margin-top: 26px;
@@ -1826,7 +1923,7 @@ img {
   display: flex;
   gap: 18px;
   align-items: center;
-  font-size: 0.72rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-block: 23px;
 }
@@ -1838,7 +1935,7 @@ img {
   flex: 1;
 }
 .auth-switch {
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
   text-align: center;
   color: var(--muted);
   margin-top: 22px;
@@ -1848,7 +1945,7 @@ img {
   font-weight: 600;
 }
 .auth-footnote {
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
   line-height: 1.7;
   color: var(--muted);
   margin-top: 20px;
@@ -1863,13 +1960,13 @@ img {
 }
 .directory-filters .input,
 .directory-filters .select {
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 .directory-results {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   margin-bottom: 20px;
   color: var(--muted);
 }
@@ -1893,12 +1990,12 @@ img {
   margin-bottom: 23px;
 }
 .specialty-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin-bottom: 10px;
 }
 .specialty-card p {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 .doctor-profile-grid {
   display: grid;
@@ -1921,8 +2018,8 @@ img {
   font-size: 3rem;
 }
 .doctor-profile-identity h1 {
-  font-size: 2.7rem;
-  line-height: 1.15;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.3;
   margin-bottom: 10px;
 }
 .doctor-profile-section {
@@ -1930,16 +2027,17 @@ img {
   border-top: 1px solid var(--border);
 }
 .doctor-profile-section h2 {
-  font-family: var(--font-sans);
-  font-size: 1.05rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 12px;
   letter-spacing: 0;
 }
 .doctor-profile-section p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--muted);
   white-space: pre-line;
+  max-width: 65ch;
 }
 .booking-panel {
   position: sticky;
@@ -1951,7 +2049,7 @@ img {
   margin-bottom: 8px;
 }
 .booking-panel p {
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   color: var(--muted);
 }
 .booking-panel .button {
@@ -1973,7 +2071,7 @@ img {
   background: none;
   color: var(--muted);
   min-height: 44px;
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
   margin-top: 14px;
 }
 .favorite-button[aria-pressed="true"] {
@@ -1999,7 +2097,7 @@ img {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-caption);
 }
 .booking-step span {
   width: 25px;
@@ -2008,7 +2106,7 @@ img {
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
 }
 .booking-step.active {
   color: var(--teal);
@@ -2032,12 +2130,12 @@ img {
   border-radius: 12px;
   padding: 10px 16px;
   background: white;
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   min-width: 70px;
 }
 .date-option strong {
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 .date-option.selected,
 .time-option.selected {
@@ -2057,10 +2155,10 @@ img {
   border-radius: 12px;
   min-height: 44px;
   padding: 9px 17px;
-  font-size: 0.84rem;
+  font-size: 0.9375rem;
 }
 .time-zone-note {
-  font-size: 0.73rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-top: 20px;
 }
@@ -2078,7 +2176,8 @@ img {
   gap: 20px;
   padding-block: 12px;
   border-bottom: 1px solid #d6dfd6;
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
+  align-items: flex-start;
 }
 .summary-row span:first-child {
   color: var(--muted);
@@ -2094,7 +2193,7 @@ img {
 }
 .booking-review p {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 .booking-confirmed {
   padding: 50px 35px;
@@ -2105,7 +2204,7 @@ img {
   margin-bottom: 20px;
 }
 .booking-confirmed h1 {
-  font-size: 3.3rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   margin-bottom: 18px;
 }
 .booking-confirmed p {
@@ -2126,7 +2225,7 @@ img {
   margin-bottom: 30px;
 }
 .dashboard-heading h1 {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 4vw, 3rem);
 }
 .dashboard-heading p {
   color: var(--muted);
@@ -2144,10 +2243,11 @@ img {
   background: transparent;
   padding: 14px 20px;
   border-bottom: 2px solid transparent;
-  font-size: 0.84rem;
+  font-size: 0.875rem;
   white-space: nowrap;
   min-height: 48px;
   color: var(--muted);
+  font-weight: 600;
 }
 .dashboard-tab[aria-selected="true"] {
   color: var(--teal);
@@ -2165,10 +2265,10 @@ img {
   justify-content: space-between;
 }
 .appointment-info h3 {
-  font-size: 1rem;
+  font-size: 1.125rem;
 }
 .appointment-info p {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--muted);
   margin-top: 5px;
 }
@@ -2188,11 +2288,11 @@ img {
   gap: 25px;
 }
 .session-card h3 {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 .session-card p {
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-top: 5px;
 }
@@ -2220,11 +2320,11 @@ img {
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.83rem;
+  font-size: 0.875rem;
   text-align: start;
 }
 .admin-table th {
-  font-weight: 550;
+  font-weight: 600;
   color: var(--muted);
   padding: 13px 17px;
   border-bottom: 1px solid var(--border);
@@ -2239,7 +2339,7 @@ img {
 .admin-table .button {
   min-height: 36px;
   padding: 8px 12px;
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
 }
 .admin-row-actions {
   display: flex;
@@ -2309,7 +2409,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.73rem;
+  font-size: var(--text-caption);
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
@@ -2321,7 +2421,7 @@ img {
   gap: 7px;
 }
 .sal-label {
-  font-size: 0.73rem;
+  font-size: var(--text-caption);
   font-weight: 650;
   color: var(--teal);
   letter-spacing: 0.09em;
@@ -2363,7 +2463,7 @@ img {
   max-width: 470px;
 }
 .sal-message {
-  font-size: 0.92rem;
+  font-size: 1rem;
   line-height: 1.85;
   white-space: pre-line;
   overflow-wrap: anywhere;
@@ -2376,12 +2476,12 @@ img {
   background: #f7f8f4;
   border-radius: 12px;
   line-height: 1.7;
-  font-size: 0.86rem;
+  font-size: 1rem;
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
 .patient-message-label {
-  font-size: 0.65rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-bottom: 5px;
 }
@@ -2391,7 +2491,7 @@ img {
   margin-top: 20px;
 }
 .sal-response-block h3 {
-  font-size: 0.78rem;
+  font-size: var(--text-caption);
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -2427,7 +2527,7 @@ img {
   padding: 20px;
 }
 .sal-sources {
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-top: 16px;
 }
@@ -2440,7 +2540,7 @@ img {
   display: flex;
   gap: 10px;
   align-items: start;
-  font-size: 0.76rem;
+  font-size: var(--text-caption);
   line-height: 1.75;
   color: var(--muted);
   padding: 16px 0;
@@ -2456,7 +2556,7 @@ img {
   border-radius: 12px;
 }
 .urgent-panel h2 {
-  font-family: var(--font-sans);
+  font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -2468,7 +2568,7 @@ img {
   align-items: center;
 }
 .urgent-panel p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #713d3e;
 }
@@ -2518,7 +2618,7 @@ img {
   gap: 10px;
   margin-top: 9px;
   color: var(--muted);
-  font-size: 0.65rem;
+  font-size: var(--text-caption);
 }
 .sal-context {
   padding: 28px;
@@ -2537,7 +2637,7 @@ img {
   margin-bottom: 12px;
 }
 .sal-context p {
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .sal-context-detail {
@@ -2547,11 +2647,11 @@ img {
   text-align: start;
 }
 .sal-context-detail strong {
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   font-weight: 600;
 }
 .sal-context-detail p {
-  font-size: 0.76rem;
+  font-size: var(--text-caption);
   margin-top: 8px;
   white-space: pre-line;
 }
@@ -2560,7 +2660,7 @@ img {
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-caption);
 }
 .thinking-dots {
   display: flex;
@@ -2674,7 +2774,7 @@ html[dir="rtl"] .fragment-reply {
     width: 450px !important;
   }
   .floating-fragment {
-    font-size: 0.72rem;
+    font-size: var(--text-caption);
     padding: 14px 16px;
   }
   .fragment-question {
@@ -2761,7 +2861,7 @@ html[dir="rtl"] .fragment-reply {
     gap: 10px;
   }
   .journey-step small {
-    font-size: 0.65rem;
+    font-size: var(--text-caption);
   }
   .how-grid {
     gap: 45px;
@@ -2813,25 +2913,25 @@ html[dir="rtl"] .fragment-reply {
 }
 @media (max-width: 768px) {
   .container {
-    width: calc(100% - 40px);
+    width: calc(100% - 48px);
   }
   .section {
-    padding-block: 65px;
+    padding-block: 76px;
   }
   .header-inner {
     height: 76px;
-    gap: 12px;
+    gap: 16px;
   }
   .brand-logo {
     width: 105px;
   }
   .header-actions {
-    gap: 7px;
+    gap: 6px;
   }
   .header-sal {
-    font-size: 0.72rem;
-    min-height: 38px;
-    padding: 8px 12px;
+    font-size: 0.875rem;
+    min-height: 44px;
+    padding: 10px 12px;
   }
   .header-sal svg {
     display: none;
@@ -2840,7 +2940,7 @@ html[dir="rtl"] .fragment-reply {
     display: none;
   }
   .language-switch {
-    font-size: 0.72rem;
+    font-size: var(--text-caption);
     min-width: 39px;
   }
   .hero-inner {
@@ -2881,7 +2981,7 @@ html[dir="rtl"] .fragment-reply {
     inset-block-start: 5px;
     max-width: 166px;
     padding: 12px;
-    font-size: 0.68rem;
+    font-size: var(--text-caption);
   }
   .fragment-reply {
     display: none;
@@ -2892,12 +2992,12 @@ html[dir="rtl"] .fragment-reply {
     min-width: 175px;
     max-width: 210px;
     padding: 13px;
-    font-size: 0.69rem;
+    font-size: var(--text-caption);
   }
   .scene-caption {
     inset-block-end: -23px;
     inset-inline-end: 0;
-    font-size: 0.6rem;
+    font-size: var(--text-caption);
   }
   .hero-composer {
     margin-top: 25px;
@@ -2906,7 +3006,7 @@ html[dir="rtl"] .fragment-reply {
     min-height: 60px;
   }
   .hero-note {
-    font-size: 0.64rem;
+    font-size: var(--text-caption);
   }
   .journey-inner {
     grid-template-columns: repeat(2, 1fr);
@@ -2920,10 +3020,10 @@ html[dir="rtl"] .fragment-reply {
     padding-inline-end: 10px;
   }
   .journey-step strong {
-    font-size: 0.81rem;
+    font-size: var(--text-caption);
   }
   .journey-step small {
-    font-size: 0.67rem;
+    font-size: var(--text-caption);
   }
   .section-intro {
     flex-direction: column;
@@ -2933,7 +3033,7 @@ html[dir="rtl"] .fragment-reply {
   }
   .section-intro > p {
     max-width: 500px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .how-grid {
     grid-template-columns: 1fr;
@@ -2944,7 +3044,7 @@ html[dir="rtl"] .fragment-reply {
   }
   .how-copy p {
     max-width: 500px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .how-copy .text-link {
     margin-top: 14px;
@@ -2953,7 +3053,7 @@ html[dir="rtl"] .fragment-reply {
     gap: 28px;
   }
   .how-step p {
-    font-size: 0.83rem;
+    font-size: 1rem;
   }
   .preview-section {
     padding-top: 0;
@@ -2986,35 +3086,35 @@ html[dir="rtl"] .fragment-reply {
   }
   .preview-tabs button {
     padding: 9px 11px;
-    font-size: 0.72rem;
+    font-size: 0.875rem;
     gap: 7px;
-    min-height: 40px;
+    min-height: 44px;
   }
   .preview-content {
     padding: 25px;
     min-height: 440px;
   }
   .preview-bar {
-    font-size: 0.65rem;
+    font-size: var(--text-caption);
   }
   .preview-bottom > span {
-    font-size: 0.65rem;
+    font-size: var(--text-caption);
   }
   .preview-bottom .button {
     padding-inline: 14px;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
   .search-inline {
     padding: 8px 8px 8px 14px;
     gap: 9px;
   }
   .search-inline input {
-    font-size: 0.81rem;
+    font-size: 1rem;
   }
   .search-inline .button {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     padding-inline: 15px;
-    min-height: 43px;
+    min-height: 44px;
   }
   .doctor-card {
     padding: 20px;
@@ -3050,7 +3150,7 @@ html[dir="rtl"] .fragment-reply {
     font-size: 2.7rem;
   }
   .final-inner p {
-    font-size: 0.85rem;
+    font-size: 1rem;
     max-width: 330px;
   }
   .footer-main {
@@ -3059,12 +3159,12 @@ html[dir="rtl"] .fragment-reply {
   .footer-main nav {
     gap: 17px;
     flex-direction: column;
-    font-size: 0.75rem;
+    font-size: var(--text-caption);
   }
   .footer-bottom {
     flex-wrap: wrap;
     gap: 15px;
-    font-size: 0.64rem;
+    font-size: var(--text-caption);
   }
   .footer-bottom p {
     order: 3;
@@ -3074,10 +3174,10 @@ html[dir="rtl"] .fragment-reply {
     padding-block: 115px 55px;
   }
   .page-heading h1 {
-    font-size: 3rem;
+    font-size: clamp(2.25rem, 5vw, 2.75rem);
   }
   .page-heading p {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .directory-filters {
     padding: 18px;
@@ -3146,7 +3246,7 @@ html[dir="rtl"] .fragment-reply {
     font-size: 2.35rem;
   }
   .consultation-heading .button {
-    font-size: 0.73rem;
+    font-size: var(--text-caption);
     padding-inline: 14px;
     min-height: 42px;
   }
@@ -3171,12 +3271,12 @@ html[dir="rtl"] .fragment-reply {
     font-size: 2.8rem;
   }
   .dashboard-heading .button {
-    font-size: 0.75rem;
+    font-size: var(--text-caption);
     padding-inline: 13px;
   }
   .dashboard-tab {
     padding-inline: 16px;
-    font-size: 0.78rem;
+    font-size: var(--text-caption);
   }
   .appointment-card {
     align-items: start;
@@ -3202,10 +3302,10 @@ html[dir="rtl"] .fragment-reply {
 }
 @media (max-width: 430px) {
   .container {
-    width: calc(100% - 32px);
+    width: calc(100% - 40px);
   }
   .header-actions {
-    gap: 3px;
+    gap: 4px;
   }
   .header-sal {
     padding-inline: 10px;
@@ -3223,7 +3323,7 @@ html[dir="rtl"] .fragment-reply {
     font-size: 0.86rem;
   }
   .hero .chip {
-    font-size: 0.67rem;
+    font-size: var(--text-caption);
     padding-inline: 10px;
   }
   .hero-scene {
@@ -3238,7 +3338,7 @@ html[dir="rtl"] .fragment-reply {
     inset-inline-end: 0;
     max-width: 148px;
     inset-block-start: 2px;
-    font-size: 0.64rem;
+    font-size: var(--text-caption);
   }
   .fragment-care {
     max-width: 182px;
@@ -3246,7 +3346,7 @@ html[dir="rtl"] .fragment-reply {
     inset-block-end: 4px;
   }
   .fragment-care strong {
-    font-size: 0.81rem;
+    font-size: var(--text-caption);
   }
   .care-icon {
     width: 30px;
@@ -3256,7 +3356,7 @@ html[dir="rtl"] .fragment-reply {
     gap: 7px;
   }
   .hero-input input {
-    font-size: 0.78rem;
+    font-size: var(--text-caption);
   }
   .hero-input svg:first-child {
     width: 16px;
@@ -3270,7 +3370,7 @@ html[dir="rtl"] .fragment-reply {
     gap: 9px;
   }
   .journey-step strong {
-    font-size: 0.76rem;
+    font-size: var(--text-caption);
   }
   .how-steps {
     grid-template-columns: 1fr;
@@ -3290,7 +3390,7 @@ html[dir="rtl"] .fragment-reply {
     gap: 10px;
   }
   .preview-tabs button {
-    font-size: 0.67rem;
+    font-size: 0.875rem;
     padding-inline: 8px;
   }
   .preview-tabs button span {
@@ -3326,27 +3426,31 @@ html[dir="rtl"] .fragment-reply {
   }
   .final-inner {
     position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
   }
   .final-inner > div:first-child {
     position: relative;
     z-index: 2;
-    width: 78%;
+    width: 100%;
   }
   .final-inner h2 {
     font-size: 2.6rem;
   }
   .final-inner .sal-mascot {
-    position: absolute;
-    inset-inline-end: -50px;
-    inset-block-end: 15px;
-    opacity: 0.75;
-    width: 165px !important;
+    position: relative;
+    inset-inline-end: auto;
+    inset-block-end: auto;
+    opacity: 1;
+    width: 245px !important;
+    margin: 48px auto 0;
   }
   .footer-brand .brand-logo {
     width: 120px;
   }
   .footer-main p {
-    font-size: 0.74rem;
+    font-size: 0.875rem;
     max-width: 180px;
   }
   .specialties-grid {
@@ -3360,7 +3464,7 @@ html[dir="rtl"] .fragment-reply {
   }
   .directory-results {
     gap: 20px;
-    font-size: 0.75rem;
+    font-size: var(--text-caption);
   }
   .doctor-profile-identity {
     align-items: start;
@@ -3382,7 +3486,7 @@ html[dir="rtl"] .fragment-reply {
     min-height: 610px;
   }
   .consultation-topbar {
-    font-size: 0.65rem;
+    font-size: var(--text-caption);
   }
   .consultation-heading {
     gap: 12px;
@@ -3426,14 +3530,14 @@ html[dir="rtl"] .fragment-reply {
     font-size: 1.65rem;
   }
   .dashboard-panel-heading .button {
-    font-size: 0.73rem;
+    font-size: var(--text-caption);
     padding-inline: 12px;
   }
   .booking-stepper {
     gap: 10px;
   }
   .booking-step {
-    font-size: 0.68rem;
+    font-size: var(--text-caption);
   }
   .booking-step span {
     width: 21px;
@@ -3466,15 +3570,16 @@ html[dir="rtl"] .fragment-reply {
 }
 @media (max-width: 360px) {
   .header-sal {
-    font-size: 0.64rem;
+    font-size: var(--text-caption);
     padding-inline: 8px;
   }
   .language-switch {
-    font-size: 0.64rem;
+    font-size: var(--text-caption);
     min-width: 32px;
+    min-height: 44px;
   }
   .menu-toggle {
-    width: 34px;
+    width: 44px;
   }
   .brand-logo {
     width: 85px;
@@ -3496,10 +3601,10 @@ html[dir="rtl"] .fragment-reply {
     max-width: 167px;
   }
   .journey-step small {
-    font-size: 0.62rem;
+    font-size: var(--text-caption);
   }
   .hero-note {
-    font-size: 0.59rem;
+    font-size: var(--text-caption);
   }
   html[dir="rtl"] .hero h1 {
     font-size: 2.55rem;
@@ -3518,70 +3623,42 @@ html[dir="rtl"] .fragment-reply {
 }
 
 .voice-privacy {
-  font-size: 0.58rem;
-  color: #89a8ae;
-  margin-top: 6px;
+  font-size: var(--text-caption);
+  color: var(--on-dark-muted);
+  margin-top: 10px;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-@media (max-height: 850px) {
-  .voice-stage {
-    padding-top: 110px;
-  }
-  .voice-stage .voice-mascot-scene {
-    height: 220px;
-  }
-  .voice-stage .voice-mascot {
-    width: 290px !important;
-  }
-  .voice-stage h1 {
-    font-size: 2.7rem;
-    margin-bottom: 10px;
-  }
-  .voice-stage h1 span {
-    font-size: 0.96rem;
-    margin-top: 5px;
-  }
-  .voice-stage .sal-waveform {
-    margin-block: 3px 9px;
-    height: 22px;
+/* Arabic uses its own heading family, weight and spacing throughout the UI. */
+html[lang="ar"] body * {
+  letter-spacing: 0;
+}
+html[lang="ar"] .voice-stage > h1 {
+  font-size: clamp(2.5rem, 4.4vw, 4rem);
+  line-height: 1.3;
+}
+html[lang="ar"] .how-copy h2,
+html[lang="ar"] .section-intro h2,
+html[lang="ar"] .trust-inner h2,
+html[lang="ar"] .final-inner h2,
+html[lang="ar"] .auth-story h2 {
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  line-height: 1.3;
+}
+@media (min-width: 701px) and (max-width: 1024px) {
+  .container {
+    width: calc(100% - 64px);
   }
 }
-@media (max-height: 700px) {
-  .voice-stage {
-    padding-top: 105px;
-    padding-bottom: 18px;
+@media (max-width: 768px) {
+  html[lang="ar"] .voice-stage > h1,
+  html[lang="ar"] .page-heading h1 {
+    font-size: clamp(2.375rem, 7vw, 2.75rem);
   }
-  .voice-stage .voice-mascot-scene {
-    height: 145px;
-    margin-block: 0 8px;
-  }
-  .voice-stage .voice-mascot {
-    width: 190px !important;
-  }
-  .voice-stage h1 {
-    font-size: 2.2rem;
-    margin-block: 4px 8px;
-  }
-  .voice-stage h1 span {
-    font-size: 0.86rem;
-    margin-top: 3px;
-  }
-  .voice-stage .sal-waveform {
-    height: 18px;
-    margin-block: 0 7px;
-  }
-  .voice-stage .sal-mic-button {
-    width: 74px;
-    height: 74px;
-  }
-  .voice-stage .voice-call-controls {
-    margin-bottom: 35px;
-  }
-  .voice-stage .voice-boundary {
-    margin-top: 12px;
-  }
-  .voice-page .voice-stage {
-    padding-top: 128px;
+  html[lang="ar"] .how-copy h2,
+  html[lang="ar"] .section-intro h2,
+  html[lang="ar"] .trust-inner h2,
+  html[lang="ar"] .final-inner h2 {
+    font-size: 2.125rem;
   }
 }

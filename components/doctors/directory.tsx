@@ -54,7 +54,9 @@ export function Directory({
   }
   const fields = (
     <>
-      <FormField label={t(locale, "Doctor or keyword", "طبيب أو كلمة للبحث")}>
+      <FormField
+        label={t(locale, "Doctor or keyword", "اسم الطبيب أو كلمة للبحث")}
+      >
         <input
           className="input"
           name="q"
@@ -70,7 +72,7 @@ export function Directory({
           defaultValue={initialFilters.specialty || ""}
         >
           <option value="">
-            {t(locale, "All specialties", "كل التخصصات")}
+            {t(locale, "All specialties", "جميع التخصصات")}
           </option>
           {specialties.map((s) => (
             <option value={s.slug} key={s.id}>
@@ -86,7 +88,7 @@ export function Directory({
             name="city"
             defaultValue={initialFilters.city || ""}
           >
-            <option value="">{t(locale, "All cities", "كل المدن")}</option>
+            <option value="">{t(locale, "All cities", "جميع المدن")}</option>
             {cities.map((city) => (
               <option key={city}>{city}</option>
             ))}
@@ -100,7 +102,7 @@ export function Directory({
             name="language"
             defaultValue={initialFilters.language || ""}
           >
-            <option value="">{t(locale, "Any language", "كل اللغات")}</option>
+            <option value="">{t(locale, "Any language", "جميع اللغات")}</option>
             {languages.map((l) => (
               <option key={l} value={l}>
                 {locale === "ar"
@@ -123,7 +125,7 @@ export function Directory({
               <option value={type} key={type}>
                 {type === "in_person"
                   ? t(locale, "In person", "في العيادة")
-                  : t(locale, "Video consultation", "استشارة فيديو")}
+                  : t(locale, "Video consultation", "استشارة بالفيديو")}
               </option>
             ))}
           </select>
@@ -173,10 +175,14 @@ export function Directory({
         <button
           className="text-link"
           type="button"
-          style={{ border: 0, background: "none", fontSize: ".78rem" }}
+          style={{
+            border: 0,
+            background: "none",
+            fontSize: "var(--text-caption)",
+          }}
           onClick={() => router.push("/doctors")}
         >
-          {t(locale, "Clear filters", "مسح التصفية")}
+          {t(locale, "Clear filters", "مسح خيارات البحث")}
         </button>
       </div>
       {pending ? (
@@ -196,16 +202,16 @@ export function Directory({
           title={t(
             locale,
             "No doctors match those filters.",
-            "لا يوجد أطباء يطابقون هذه التصفية.",
+            "لم نعثر على أطباء بهذه الخيارات.",
           )}
           description={t(
             locale,
             "Try another specialty or remove a filter. SAL can help you find where to begin.",
-            "جرّب تخصصاً آخر أو أزل إحدى خيارات التصفية. سال يساعدك على معرفة البداية.",
+            "جرّب تخصصًا آخر أو أزل أحد خيارات التصفية. يمكنك سؤال سال إن لم تعرف من أين تبدأ.",
           )}
         >
           <Button variant="secondary" onClick={() => router.push("/doctors")}>
-            {t(locale, "Reset filters", "إعادة ضبط التصفية")}
+            {t(locale, "Reset filters", "إعادة ضبط البحث")}
           </Button>
         </EmptyState>
       )}

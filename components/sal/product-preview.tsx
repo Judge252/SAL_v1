@@ -33,7 +33,7 @@ export function ProductPreview({ doctors }: { doctors: Doctor[] }) {
         <div
           className="preview-tabs"
           role="tablist"
-          aria-label={t(locale, "Explore an example", "استكشف مثالاً")}
+          aria-label={t(locale, "Explore an example", "استكشف مثالًا")}
         >
           {steps.map((name, i) => (
             <button
@@ -69,7 +69,7 @@ export function ProductPreview({ doctors }: { doctors: Doctor[] }) {
               size={13}
               style={{ display: "inline", verticalAlign: "middle" }}
             />{" "}
-            {t(locale, "Guidance, not diagnosis", "إرشاد وليس تشخيصاً")}
+            {t(locale, "Guidance, not diagnosis", "إرشاد وليس تشخيصًا")}
           </span>
         </div>
         <div className="preview-dialogue">
@@ -94,7 +94,7 @@ export function ProductPreview({ doctors }: { doctors: Doctor[] }) {
           {stage >= 1 && (
             <div className="preview-stage">
               <h3>
-                {t(locale, "Putting the pieces together", "نجمع التفاصيل معاً")}
+                {t(locale, "Putting the pieces together", "نجمع التفاصيل معًا")}
               </h3>
               <p>
                 {t(
@@ -118,7 +118,7 @@ export function ProductPreview({ doctors }: { doctors: Doctor[] }) {
                 {t(
                   locale,
                   "When a specialty is appropriate, you can review matching profiles from the directory.",
-                  "عندما يكون التخصص مناسباً، يمكنك مراجعة الملفات المطابقة من الدليل.",
+                  "إذا كان التخصص مناسبًا، يمكنك استكشاف ملفات الأطباء في الدليل.",
                 )}
               </p>
               {doctors[0] ? (
@@ -144,7 +144,7 @@ export function ProductPreview({ doctors }: { doctors: Doctor[] }) {
             )}
           </span>
           <LinkButton href="/sal" variant="secondary" arrow>
-            {t(locale, "Talk to SAL", "تحدث مع سال")}
+            {t(locale, "Talk to SAL", "تحدّث مع سال")}
           </LinkButton>
         </div>
       </div>

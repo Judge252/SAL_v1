@@ -64,11 +64,15 @@ export default async function DoctorPage({
               ) : doctor.is_verified ? (
                 <Badge className="badge-teal">
                   <BadgeCheck size={13} />
-                  {t(locale, "Verified profile", "ملف موثق")}
+                  {t(locale, "Verified profile", "ملف موثّق")}
                 </Badge>
               ) : null}
               <h1 style={{ marginTop: 12 }}>
-                {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+                <bdi lang={locale === "ar" && doctor.name_ar ? "ar" : "en"}>
+                  {locale === "ar"
+                    ? doctor.name_ar || doctor.name
+                    : doctor.name}
+                </bdi>
               </h1>
               <p className="doctor-specialty">
                 {doctor.specialties
@@ -88,7 +92,9 @@ export default async function DoctorPage({
           )}
           <section className="doctor-profile-section">
             <h2>{t(locale, "About this doctor", "عن الطبيب")}</h2>
-            <p>{locale === "ar" ? doctor.bio_ar || doctor.bio : doctor.bio}</p>
+            <p dir="auto">
+              {locale === "ar" ? doctor.bio_ar || doctor.bio : doctor.bio}
+            </p>
             {doctor.years_experience !== null && (
               <p style={{ marginTop: 15 }}>
                 {t(
@@ -110,9 +116,11 @@ export default async function DoctorPage({
                   marginInlineEnd: 7,
                 }}
               />
-              {doctor.city}
+              <bdi>{doctor.city}</bdi>
             </p>
-            <p style={{ marginTop: 8 }}>{doctor.address}</p>
+            <p style={{ marginTop: 8 }}>
+              <bdi>{doctor.address}</bdi>
+            </p>
           </section>
           <section className="doctor-profile-section">
             <h2>
@@ -143,7 +151,7 @@ export default async function DoctorPage({
               {doctor.consultation_types.map((type) => (
                 <Badge key={type}>
                   {type === "video"
-                    ? t(locale, "Video consultation", "استشارة فيديو")
+                    ? t(locale, "Video consultation", "استشارة بالفيديو")
                     : t(locale, "In-person visit", "زيارة في العيادة")}
                 </Badge>
               ))}
@@ -154,41 +162,45 @@ export default async function DoctorPage({
           <span className="eyebrow">
             {t(locale, "Your next step", "خطوتك التالية")}
           </span>
-          <h2>{t(locale, "Make time for care.", "حدد وقتاً لرعايتك.")}</h2>
+          <h2>{t(locale, "Make time for care.", "حدد وقتًا لرعايتك.")}</h2>
           <p>
             {t(
               locale,
               "Choose an available appointment that works for you.",
-              "اختر موعداً متاحاً يناسبك.",
+              "اختر موعدًا متاحًا يناسبك.",
             )}
           </p>
           <div className="doctor-price">
-            <strong>{money(doctor.price, doctor.currency, locale)}</strong>
+            <strong>
+              <bdi>{money(doctor.price, doctor.currency, locale)}</bdi>
+            </strong>{" "}
             <small>{t(locale, "per consultation", "للاستشارة")}</small>
           </div>
           {slots[0] ? (
             <p className="slot-preview">
               <CalendarDays size={17} />
               {t(locale, "Next available: ", "أقرب موعد: ")}
-              {dateLabel(slots[0].start_at, locale, {
-                weekday: "short",
-                day: "numeric",
-                month: "short",
-                hour: "numeric",
-                minute: "2-digit",
-              })}
+              <bdi>
+                {dateLabel(slots[0].start_at, locale, {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </bdi>
             </p>
           ) : (
             <p className="slot-preview">
               {t(
                 locale,
                 "No appointment times available yet.",
-                "لا يوجد مواعيد متاحة حالياً.",
+                "لا توجد مواعيد متاحة حاليًا.",
               )}
             </p>
           )}
           <LinkButton href={`/booking/${doctor.slug}`}>
-            {t(locale, "Book an appointment", "احجز موعداً")}
+            {t(locale, "Book an appointment", "احجز موعدًا")}
           </LinkButton>
           <FavoriteButton
             doctorId={doctor.id}

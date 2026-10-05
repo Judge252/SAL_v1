@@ -188,9 +188,9 @@ export function AdminDashboard({
             >
               <Plus size={16} />
               {tab === 0
-                ? t(locale, "Add doctor", "أضف طبيباً")
+                ? t(locale, "Add doctor", "أضف طبيبًا")
                 : tab === 1
-                  ? t(locale, "Add specialty", "أضف تخصصاً")
+                  ? t(locale, "Add specialty", "أضف تخصصًا")
                   : t(locale, "Add document", "أضف مستنداً")}
             </Button>
           )}
@@ -241,7 +241,9 @@ export function AdminDashboard({
                 doctors.map((d) => (
                   <tr key={d.id}>
                     <td>
-                      {locale === "ar" ? d.name_ar || d.name : d.name}
+                      <bdi>
+                        {locale === "ar" ? d.name_ar || d.name : d.name}
+                      </bdi>
                       {d.is_demo && (
                         <small>
                           {t(
@@ -268,7 +270,7 @@ export function AdminDashboard({
                           : t(locale, "Inactive", "غير نشط")}
                       </Badge>
                       {d.is_verified && (
-                        <small>{t(locale, "Verified", "موثق")}</small>
+                        <small>{t(locale, "Verified", "موثّق")}</small>
                       )}
                     </td>
                     <td>
@@ -358,14 +360,18 @@ export function AdminDashboard({
               {tab === 2 &&
                 appointments.map((a) => (
                   <tr key={a.id}>
-                    <td>{a.doctors?.name || "—"}</td>
                     <td>
-                      {dateLabel(a.start_at, locale, {
-                        day: "numeric",
-                        month: "short",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
+                      <bdi>{a.doctors?.name || "—"}</bdi>
+                    </td>
+                    <td>
+                      <bdi>
+                        {dateLabel(a.start_at, locale, {
+                          day: "numeric",
+                          month: "short",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </bdi>
                     </td>
                     <td>
                       <Badge className="badge-muted">
@@ -378,7 +384,9 @@ export function AdminDashboard({
                 users.map((u) => (
                   <tr key={u.id}>
                     <td>
-                      {u.name || t(locale, "Account holder", "صاحب الحساب")}
+                      <bdi>
+                        {u.name || t(locale, "Account holder", "صاحب الحساب")}
+                      </bdi>
                     </td>
                     <td>
                       {u.role === "doctor"
@@ -389,11 +397,13 @@ export function AdminDashboard({
                     </td>
                     <td>{u.locale === "ar" ? "العربية" : "English"}</td>
                     <td>
-                      {dateLabel(u.created_at, locale, {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                      <bdi>
+                        {dateLabel(u.created_at, locale, {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </bdi>
                     </td>
                   </tr>
                 ))}
@@ -407,7 +417,7 @@ export function AdminDashboard({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-link"
-                        style={{ fontSize: ".78rem" }}
+                        style={{ fontSize: "var(--text-caption)" }}
                       >
                         {t(locale, "View source", "عرض المصدر")}
                       </a>
@@ -452,7 +462,7 @@ export function AdminDashboard({
           {[doctors, specialties, appointments, users, documents][tab]
             .length === 0 && (
             <EmptyState
-              title={t(locale, "No records yet.", "لا يوجد سجلات بعد.")}
+              title={t(locale, "No records yet.", "لا توجد سجلات بعد.")}
             />
           )}
         </div>
@@ -481,6 +491,7 @@ export function AdminDashboard({
                     label={t(locale, "Name (English)", "الاسم بالإنجليزية")}
                   >
                     <input
+                      dir="ltr"
                       className="input"
                       name="name"
                       defaultValue={editor.record?.name}
@@ -528,7 +539,7 @@ export function AdminDashboard({
                     required
                   >
                     <option value="">
-                      {t(locale, "Choose a specialty", "اختر تخصصاً")}
+                      {t(locale, "Choose a specialty", "اختر تخصصًا")}
                     </option>
                     {specialties.map((s) => (
                       <option value={s.id} key={s.id}>
@@ -556,7 +567,10 @@ export function AdminDashboard({
                       .filter((u) => u.role !== "admin")
                       .map((u) => (
                         <option value={u.id} key={u.id}>
-                          {u.name || t(locale, "Account holder", "صاحب الحساب")}
+                          <bdi>
+                            {u.name ||
+                              t(locale, "Account holder", "صاحب الحساب")}
+                          </bdi>
                         </option>
                       ))}
                   </select>
@@ -565,6 +579,7 @@ export function AdminDashboard({
                   label={t(locale, "Biography (English)", "نبذة بالإنجليزية")}
                 >
                   <textarea
+                    dir="ltr"
                     className="textarea"
                     name="bio"
                     defaultValue={editor.record?.bio}
@@ -601,6 +616,7 @@ export function AdminDashboard({
                     )}
                   >
                     <input
+                      dir="ltr"
                       className="input"
                       name="years_experience"
                       type="number"
@@ -627,6 +643,7 @@ export function AdminDashboard({
                     )}
                   >
                     <input
+                      dir="ltr"
                       className="input"
                       name="price"
                       type="number"
@@ -704,7 +721,7 @@ export function AdminDashboard({
                         }
                       />
                       {type === "video"
-                        ? t(locale, "Video consultation", "استشارة فيديو")
+                        ? t(locale, "Video consultation", "استشارة بالفيديو")
                         : t(locale, "In person", "في العيادة")}
                     </label>
                   ))}
@@ -850,7 +867,11 @@ export function AdminDashboard({
                     name="is_active"
                     defaultChecked={editor.record?.is_active ?? true}
                   />
-                  {t(locale, "Use in SAL retrieval", "استخدم في مراجع سال")}
+                  {t(
+                    locale,
+                    "Use in SAL retrieval",
+                    "إتاحة المحتوى للبحث في سال",
+                  )}
                 </label>
               </>
             )}
@@ -870,7 +891,9 @@ export function AdminDashboard({
         onClose={() => setRemove(null)}
         title={t(locale, "Remove this record?", "حذف هذا السجل؟")}
       >
-        <p>{remove?.name}</p>
+        <p>
+          <bdi>{remove?.name}</bdi>
+        </p>
         {error && (
           <p className="error-notice mt-4" role="alert">
             {error}

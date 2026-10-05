@@ -36,12 +36,12 @@ export function Footer({ locale }: { locale: Locale }) {
         </nav>
       </div>
       <div className="container footer-bottom">
-        <span>© {new Date().getFullYear()} The Clinic</span>
+        <span dir="ltr">© {new Date().getFullYear()} The Clinic</span>
         <p>
           {t(
             locale,
             "SAL guides your next step. A doctor provides your care.",
-            "سال يرشد خطوتك التالية. والطبيب يقدم رعايتك.",
+            "سال يرشدك إلى خطوتك التالية، والطبيب يقدّم لك الرعاية.",
           )}
         </p>
         <div>

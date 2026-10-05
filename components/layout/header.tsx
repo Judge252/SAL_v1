@@ -62,7 +62,7 @@ export function Header({
   const links = [
     ["/doctors", t(locale, "Find a doctor", "ابحث عن طبيب")],
     ["/specialties", t(locale, "Specialties", "التخصصات")],
-    ["/#how-it-works", t(locale, "How it works", "كيف يعمل")],
+    ["/#how-it-works", t(locale, "How it works", "كيف نساعدك")],
   ];
   const dark = pathname === "/" && !scrolled;
   return (
@@ -118,8 +118,10 @@ export function Header({
               >
                 <UserRound size={16} />
                 <span>
-                  {profile.name.split(" ")[0] ||
-                    t(locale, "My account", "حسابي")}
+                  <bdi>
+                    {profile.name.split(" ")[0] ||
+                      t(locale, "My account", "حسابي")}
+                  </bdi>
                 </span>
               </summary>
               <nav
@@ -152,7 +154,7 @@ export function Header({
             </>
           )}
           <Link className="button button-sal header-sal" href="/sal">
-            {t(locale, "Talk to SAL", "تحدث مع سال")}
+            {t(locale, "Talk to SAL", "تحدّث مع سال")}
             <ArrowUpRight size={16} className="directional" />
           </Link>
           <button

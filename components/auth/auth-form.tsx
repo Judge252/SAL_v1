@@ -23,10 +23,10 @@ export function AuthForm({
     mode === "signup"
       ? t(locale, "A place for your care.", "مكان لرعايتك.")
       : mode === "forgot"
-        ? t(locale, "Reset your password.", "استعد كلمة المرور.")
+        ? t(locale, "Reset your password.", "استعادة كلمة المرور.")
         : mode === "reset"
           ? t(locale, "Choose a new password.", "اختر كلمة مرور جديدة.")
-          : t(locale, "Welcome back.", "أهلاً بعودتك.");
+          : t(locale, "Welcome back.", "مرحبًا بعودتك.");
   async function act(body: unknown) {
     setBusy(true);
     setError("");
@@ -150,7 +150,11 @@ export function AuthForm({
           <Link
             href={`/auth?mode=forgot${query}`}
             className="text-link"
-            style={{ fontSize: ".75rem", justifySelf: "end", marginTop: -12 }}
+            style={{
+              fontSize: "var(--text-caption)",
+              justifySelf: "end",
+              marginTop: -12,
+            }}
           >
             {t(locale, "Forgot password?", "نسيت كلمة المرور؟")}
           </Link>
@@ -194,16 +198,16 @@ export function AuthForm({
             >
               G
             </span>
-            {t(locale, "Continue with Google", "المتابعة مع جوجل")}
+            {t(locale, "Continue with Google", "المتابعة باستخدام جوجل")}
           </Button>
         </>
       )}
       <p className="auth-switch">
         {mode === "login" ? (
           <>
-            {t(locale, "New to The Clinic? ", "جديد هنا؟ ")}
+            {t(locale, "New to The Clinic? ", "هل هذه زيارتك الأولى؟ ")}
             <Link href={`/auth?mode=signup${query}`}>
-              {t(locale, "Create an account", "أنشئ حساباً")}
+              {t(locale, "Create an account", "أنشئ حسابًا")}
             </Link>
           </>
         ) : (

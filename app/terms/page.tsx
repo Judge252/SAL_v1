@@ -13,7 +13,7 @@ export default async function TermsPage() {
         {t(
           locale,
           "SAL helps you navigate care. Its responses may contain mistakes and are not a medical diagnosis, prescription, or substitute for a licensed clinician. Do not delay seeking professional or emergency care because of a conversation.",
-          "سال يساعدك على الوصول للرعاية. قد تحتوي إجاباته على أخطاء ولا تمثل تشخيصاً أو وصفة أو بديلاً عن الطبيب المرخص. لا تؤخر طلب الرعاية الطبية أو الطوارئ بسبب المحادثة.",
+          "سال يساعدك على الوصول للرعاية. قد تحتوي إجاباته على أخطاء ولا تمثل تشخيصًا أو وصفة أو بديلاً عن الطبيب المرخص. لا تؤخر طلب الرعاية الطبية أو الطوارئ بسبب المحادثة.",
         )}
       </p>
       <h2>
@@ -27,7 +27,7 @@ export default async function TermsPage() {
         {t(
           locale,
           "A confirmed booking reserves a database appointment time. Profiles marked Demo represent fictional clinicians, and bookings with them are for software testing only. This application does not collect payments or provide a video-call service.",
-          "الحجز المؤكد يحجز وقتاً في قاعدة البيانات. الملفات المعلّمة كتجريبية تمثل أطباء افتراضيين، وحجوزاتها لاختبار البرنامج فقط. هذا التطبيق لا يجمع المدفوعات ولا يقدم خدمة مكالمات فيديو.",
+          "الحجز المؤكد يحجز وقتًا في قاعدة البيانات. الملفات المعلّمة كتجريبية تمثل أطباء افتراضيين، وحجوزاتها لاختبار البرنامج فقط. هذا التطبيق لا يجمع المدفوعات ولا يقدم خدمة مكالمات فيديو.",
         )}
       </p>
       <h2>{t(locale, "Responsible use", "الاستخدام المسؤول")}</h2>

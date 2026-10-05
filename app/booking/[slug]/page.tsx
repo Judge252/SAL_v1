@@ -30,7 +30,7 @@ export default async function BookingPage({
         <span className="eyebrow">
           {t(locale, "The next step, made simple", "خطوة تالية أبسط")}
         </span>
-        <h1>{t(locale, "Make time for your care.", "حدد وقتاً لرعايتك.")}</h1>
+        <h1>{t(locale, "Make time for your care.", "حدد وقتًا لرعايتك.")}</h1>
       </div>
       <BookingFlow
         doctor={doctor}

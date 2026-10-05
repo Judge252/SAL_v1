@@ -59,7 +59,11 @@ export function DoctorDashboard({
             {t(locale, "Doctor care space", "حساب الطبيب")}
           </span>
           <h1>{t(locale, "Your schedule, simply.", "جدولك، ببساطة.")}</h1>
-          <p>{locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}</p>
+          <p>
+            <bdi>
+              {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+            </bdi>
+          </p>
         </div>
       </div>
       <div className="dashboard-tabs" role="tablist">
@@ -103,16 +107,20 @@ export function DoctorDashboard({
                 <article className="card appointment-card" key={a.id}>
                   <div className="appointment-info">
                     <h3>
-                      {a.patient?.name ||
-                        t(locale, "Patient appointment", "موعد مريض")}
+                      <bdi>
+                        {a.patient?.name ||
+                          t(locale, "Patient appointment", "موعد مريض")}
+                      </bdi>
                     </h3>
                     <p>
-                      {dateLabel(a.start_at, locale, {
-                        day: "numeric",
-                        month: "long",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}{" "}
+                      <bdi>
+                        {dateLabel(a.start_at, locale, {
+                          day: "numeric",
+                          month: "long",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </bdi>{" "}
                       · {t(locale, "Cairo time", "توقيت القاهرة")}
                     </p>
                     <p
@@ -121,7 +129,7 @@ export function DoctorDashboard({
                         overflowWrap: "anywhere",
                       }}
                     >
-                      {a.reason}
+                      <bdi>{a.reason}</bdi>
                     </p>
                     <Badge className="badge-muted">
                       {statusLabel(a.status, locale)}
@@ -154,14 +162,14 @@ export function DoctorDashboard({
                         })
                       }
                     >
-                      {t(locale, "Mark completed", "حدد كمكتمل")}
+                      {t(locale, "Mark completed", "تحديد الموعد كمكتمل")}
                     </Button>
                   ) : null}
                 </article>
               ))
             ) : (
               <EmptyState
-                title={t(locale, "No appointments yet.", "لا يوجد مواعيد بعد.")}
+                title={t(locale, "No appointments yet.", "لا توجد مواعيد بعد.")}
               />
             )}
           </div>
@@ -177,7 +185,7 @@ export function DoctorDashboard({
               </h2>
               <Button onClick={() => setOpen(true)}>
                 <Plus size={16} />
-                {t(locale, "Add a time", "أضف وقتاً")}
+                {t(locale, "Add a time", "أضف وقتًا")}
               </Button>
             </div>
             <div className="dashboard-grid">
@@ -186,22 +194,29 @@ export function DoctorDashboard({
                   <div className="card appointment-card" key={s.id}>
                     <div>
                       <h3 style={{ fontSize: ".95rem" }}>
-                        {dateLabel(s.start_at, locale, {
-                          weekday: "short",
-                          day: "numeric",
-                          month: "long",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}{" "}
+                        <bdi>
+                          {dateLabel(s.start_at, locale, {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "long",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </bdi>{" "}
                         –{" "}
-                        {dateLabel(s.end_at, locale, {
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
+                        <bdi>
+                          {dateLabel(s.end_at, locale, {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </bdi>
                       </h3>
-                      <p className="muted" style={{ fontSize: ".78rem" }}>
+                      <p
+                        className="muted"
+                        style={{ fontSize: "var(--text-caption)" }}
+                      >
                         {s.consultation_type === "video"
-                          ? t(locale, "Video consultation", "استشارة فيديو")
+                          ? t(locale, "Video consultation", "استشارة بالفيديو")
                           : t(locale, "In person", "في العيادة")}{" "}
                         · {t(locale, "Cairo time", "توقيت القاهرة")}
                       </p>
@@ -213,7 +228,7 @@ export function DoctorDashboard({
                         void act({ action: "availability.remove", id: s.id })
                       }
                     >
-                      {t(locale, "Close bookings", "أغلق الحجز")}
+                      {t(locale, "Close bookings", "إيقاف الحجز")}
                     </Button>
                   </div>
                 ))
@@ -222,7 +237,7 @@ export function DoctorDashboard({
                   title={t(
                     locale,
                     "Add your first appointment time.",
-                    "أضف أول وقت متاح.",
+                    "أضف أول موعد متاح.",
                   )}
                 />
               )}
@@ -241,7 +256,7 @@ export function DoctorDashboard({
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title={t(locale, "Add appointment time", "أضف وقتاً متاحاً")}
+        title={t(locale, "Add appointment time", "أضف وقتًا متاحًا")}
       >
         <form
           className="form-grid"
@@ -258,7 +273,7 @@ export function DoctorDashboard({
             });
           }}
         >
-          <p className="muted" style={{ fontSize: ".8rem" }}>
+          <p className="muted" style={{ fontSize: "var(--text-caption)" }}>
             {t(
               locale,
               "Enter times in your device’s local time zone. Patients will see Cairo time.",
@@ -267,6 +282,7 @@ export function DoctorDashboard({
           </p>
           <FormField label={t(locale, "Starts", "بداية الموعد")}>
             <input
+              dir="ltr"
               className="input"
               type="datetime-local"
               name="start"
@@ -275,6 +291,7 @@ export function DoctorDashboard({
           </FormField>
           <FormField label={t(locale, "Ends", "نهاية الموعد")}>
             <input
+              dir="ltr"
               className="input"
               type="datetime-local"
               name="end"
@@ -317,7 +334,7 @@ export function DoctorProfileEditor({
   const locale = useLocale();
   return (
     <section className="card settings-card" style={{ maxWidth: 780 }}>
-      <h2>{t(locale, "Your public profile.", "ملفك العام.")}</h2>
+      <h2>{t(locale, "Your public profile.", "ملفك المهني.")}</h2>
       <form
         className="form-grid"
         onSubmit={(e) => {
@@ -340,6 +357,7 @@ export function DoctorProfileEditor({
         <div className="form-row">
           <FormField label={t(locale, "Name (English)", "الاسم بالإنجليزية")}>
             <input
+              dir="ltr"
               className="input"
               name="name"
               defaultValue={doctor.name}
@@ -360,6 +378,7 @@ export function DoctorProfileEditor({
         </div>
         <FormField label={t(locale, "Biography (English)", "نبذة بالإنجليزية")}>
           <textarea
+            dir="ltr"
             className="textarea"
             name="bio"
             defaultValue={doctor.bio}
@@ -388,6 +407,7 @@ export function DoctorProfileEditor({
           </FormField>
           <FormField label={t(locale, "Consultation price", "سعر الاستشارة")}>
             <input
+              dir="ltr"
               className="input"
               name="price"
               type="number"
@@ -436,7 +456,7 @@ export function DoctorProfileEditor({
                 defaultChecked={doctor.consultation_types.includes(type)}
               />
               {type === "video"
-                ? t(locale, "Video consultation", "استشارة فيديو")
+                ? t(locale, "Video consultation", "استشارة بالفيديو")
                 : t(locale, "In person", "في العيادة")}
             </label>
           ))}

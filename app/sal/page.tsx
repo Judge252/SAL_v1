@@ -45,7 +45,7 @@ export default async function SalPage({
             description={t(
               locale,
               "Use the same account or device, or start a new conversation.",
-              "استخدم نفس الحساب أو الجهاز، أو ابدأ محادثة جديدة.",
+              "استخدم الحساب نفسه أو الجهاز، أو ابدأ محادثة جديدة.",
             )}
           >
             <LinkButton href="/sal">

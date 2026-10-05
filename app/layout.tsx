@@ -7,18 +7,32 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 const display = localFont({
-  src: "../public/fonts/instrument-serif.ttf",
+  src: "../public/fonts/dm-serif-display.ttf",
+  weight: "400",
   variable: "--font-display",
   display: "swap",
 });
 const sans = localFont({
   src: "../public/fonts/manrope.ttf",
+  weight: "200 800",
   variable: "--font-sans",
   display: "swap",
 });
 const arabic = localFont({
-  src: "../public/fonts/arabic.ttf",
+  src: [
+    { path: "../public/fonts/ibm-plex-sans-arabic-medium.ttf", weight: "500" },
+    {
+      path: "../public/fonts/ibm-plex-sans-arabic-semibold.ttf",
+      weight: "600",
+    },
+  ],
   variable: "--font-arabic",
+  display: "swap",
+});
+const arabicDisplay = localFont({
+  src: "../public/fonts/alexandria.ttf",
+  weight: "600 700",
+  variable: "--font-arabic-display",
   display: "swap",
 });
 export const dynamic = "force-dynamic";
@@ -38,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: { icon: "/favicon.svg" },
     description:
       locale === "ar"
-        ? "تحدث مع سال لفهم خطوتك التالية، وابحث عن طبيب مناسب واحجز موعدك."
+        ? "تحدّث مع سال لفهم خطوتك التالية، وابحث عن طبيب مناسب واحجز موعدك."
         : "Talk to SAL, find the right kind of care, and book a doctor. Healthcare navigation in English and Arabic.",
     openGraph: {
       title,
@@ -59,7 +73,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${display.variable} ${sans.variable} ${arabic.variable}`}
+      className={`${display.variable} ${sans.variable} ${arabic.variable} ${arabicDisplay.variable}`}
     >
       <body>
         <LocaleProvider locale={locale}>

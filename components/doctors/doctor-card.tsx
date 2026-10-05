@@ -64,7 +64,9 @@ export function DoctorCard({
         <DoctorAvatar doctor={doctor} locale={locale} />
         <div>
           <h3>
-            {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+            <bdi lang={locale === "ar" && doctor.name_ar ? "ar" : "en"}>
+              {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+            </bdi>
           </h3>
           <p className="doctor-specialty">
             {doctor.specialties[0]
@@ -76,33 +78,48 @@ export function DoctorCard({
       {doctor.city && (
         <p className="doctor-meta">
           <MapPin size={14} />
-          {doctor.city}
+          <bdi>{doctor.city}</bdi>
         </p>
       )}
       <p className="doctor-meta">
         <Languages size={14} />
-        {doctor.languages
-          .map((l) =>
-            locale === "ar"
-              ? { Arabic: "العربية", English: "الإنجليزية" }[l] || l
-              : l,
-          )
-          .join(" · ")}
+        <bdi>
+          {doctor.languages
+            .map((l) =>
+              locale === "ar"
+                ? { Arabic: "العربية", English: "الإنجليزية" }[l] || l
+                : l,
+            )
+            .join(" · ")}
+        </bdi>
       </p>
       <div className="doctor-price">
-        <span>{money(doctor.price, doctor.currency, locale)}</span>
+        <span>
+          <bdi>{money(doctor.price, doctor.currency, locale)}</bdi>
+        </span>{" "}
         <small>{t(locale, "per consultation", "للاستشارة")}</small>
       </div>
       {availability !== undefined && (
         <p className="doctor-meta doctor-next-slot">
           <CalendarDays size={14} />
-          {availability.length
-            ? `${t(locale, "Next: ", "التالي: ")}${new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Cairo" }).format(new Date(availability[0].start_at))}`
-            : t(
-                locale,
-                "No bookable times currently",
-                "لا توجد مواعيد متاحة حالياً",
-              )}
+          {availability.length ? (
+            <span>
+              {t(locale, "Next: ", "التالي: ")}
+              <bdi>
+                {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-GB", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "Africa/Cairo",
+                }).format(new Date(availability[0].start_at))}
+              </bdi>
+            </span>
+          ) : (
+            t(
+              locale,
+              "No bookable times currently",
+              "لا توجد مواعيد متاحة حاليًا",
+            )
+          )}
         </p>
       )}
       <div className="doctor-actions">
@@ -110,7 +127,7 @@ export function DoctorCard({
           {t(locale, "View profile", "عرض الملف")}
         </LinkButton>
         <LinkButton href={`/booking/${doctor.slug}`}>
-          {t(locale, "Book a visit", "احجز موعداً")}
+          {t(locale, "Book a visit", "احجز موعدًا")}
         </LinkButton>
       </div>
     </article>

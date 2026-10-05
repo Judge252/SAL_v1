@@ -58,20 +58,20 @@ export function PatientDashboard({
             {t(locale, "Your care, in one place", "رعايتك، في مكان واحد")}
           </span>
           <h1>
-            {t(locale, "Hello, ", "أهلاً، ")}
-            {profile.name.split(" ")[0] || t(locale, "there", "بك")}.
+            {t(locale, "Hello, ", "مرحبًا، ")}
+            <bdi>{profile.name.split(" ")[0] || t(locale, "there", "بك")}</bdi>.
           </h1>
           <p>
             {t(
               locale,
               "A calm place for your next steps.",
-              "مكان هادئ لخطواتك التالية.",
+              "مواعيدك ومحادثاتك وخطواتك التالية، في مكان واحد.",
             )}
           </p>
         </div>
         <LinkButton href="/sal">
           <MessageCircle size={17} />
-          {t(locale, "Talk to SAL", "تحدث مع سال")}
+          {t(locale, "Talk to SAL", "تحدّث مع سال")}
         </LinkButton>
       </div>
       <div
@@ -113,7 +113,7 @@ export function PatientDashboard({
                 title={t(
                   locale,
                   "No appointments here yet.",
-                  "لا يوجد مواعيد هنا بعد.",
+                  "لا توجد مواعيد هنا بعد.",
                 )}
                 description={t(
                   locale,
@@ -137,13 +137,17 @@ export function PatientDashboard({
                   href={`/sal?session=${s.id}`}
                 >
                   <div>
-                    <h3>{s.title}</h3>
+                    <h3>
+                      <bdi>{s.title}</bdi>
+                    </h3>
                     <p>
-                      {dateLabel(s.updated_at, locale, {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
+                      <bdi>
+                        {dateLabel(s.updated_at, locale, {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </bdi>
                     </p>
                   </div>
                   <ArrowUpRight size={20} className="directional" />
@@ -172,11 +176,7 @@ export function PatientDashboard({
             </div>
           ) : (
             <EmptyState
-              title={t(
-                locale,
-                "No saved doctors yet.",
-                "لا يوجد أطباء محفوظون بعد.",
-              )}
+              title={t(locale, "No saved doctors yet.", "لم تحفظ أي طبيب بعد.")}
             >
               <LinkButton href="/doctors" variant="secondary">
                 {t(locale, "Explore doctors", "استكشف الأطباء")}
@@ -202,11 +202,13 @@ export function AppointmentCard({
     <article className="card appointment-card">
       <div className="appointment-info">
         <h3>
-          {a.doctors
-            ? locale === "ar"
-              ? a.doctors.name_ar || a.doctors.name
-              : a.doctors.name
-            : t(locale, "Your appointment", "موعدك")}
+          <bdi>
+            {a.doctors
+              ? locale === "ar"
+                ? a.doctors.name_ar || a.doctors.name
+                : a.doctors.name
+              : t(locale, "Your appointment", "موعدك")}
+          </bdi>
         </h3>
         <p>
           <CalendarDays
@@ -217,18 +219,20 @@ export function AppointmentCard({
               marginInlineEnd: 6,
             }}
           />
-          {dateLabel(a.start_at, locale, {
-            weekday: "short",
-            day: "numeric",
-            month: "long",
-            hour: "numeric",
-            minute: "2-digit",
-          })}{" "}
+          <bdi>
+            {dateLabel(a.start_at, locale, {
+              weekday: "short",
+              day: "numeric",
+              month: "long",
+              hour: "numeric",
+              minute: "2-digit",
+            })}
+          </bdi>{" "}
           · {t(locale, "Cairo time", "توقيت القاهرة")}
         </p>
         <p>
           {a.consultation_type === "video"
-            ? t(locale, "Video consultation", "استشارة فيديو")
+            ? t(locale, "Video consultation", "استشارة بالفيديو")
             : a.doctors?.city ||
               t(locale, "In-person visit", "زيارة في العيادة")}
         </p>
@@ -291,7 +295,7 @@ export function CancelAppointment({ id }: { id: string }) {
           {t(
             locale,
             "Your time will become available for another patient.",
-            "سيصبح الوقت متاحاً لمريض آخر.",
+            "سيصبح هذا الموعد متاحًا لمريض آخر.",
           )}
         </p>
         {error && (
@@ -363,6 +367,7 @@ export function ProfileSettings({ profile }: { profile: Profile }) {
             className="input"
             name="name"
             defaultValue={profile.name}
+            dir="auto"
             minLength={2}
             maxLength={100}
             required

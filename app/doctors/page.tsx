@@ -39,9 +39,9 @@ export default async function DoctorsPage({
     <div className="container page-shell">
       <div className="page-heading">
         <span className="eyebrow">
-          {t(locale, "Care, on your terms", "الرعاية، حسب اختيارك")}
+          {t(locale, "Care, on your terms", "رعاية تناسبك")}
         </span>
-        <h1>{t(locale, "Find your next step.", "جد خطوتك التالية.")}</h1>
+        <h1>{t(locale, "Find your next step.", "اختر خطوتك التالية.")}</h1>
         <p>
           {t(
             locale,

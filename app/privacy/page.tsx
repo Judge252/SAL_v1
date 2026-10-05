@@ -14,7 +14,7 @@ export default async function PrivacyPage() {
           {t(
             locale,
             "A description of how this application currently handles information.",
-            "وصف لطريقة تعامل هذا التطبيق حالياً مع المعلومات.",
+            "وصف لطريقة تعامل هذا التطبيق حاليًا مع المعلومات.",
           )}
         </p>
       </div>

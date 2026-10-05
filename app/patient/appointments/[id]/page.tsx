@@ -79,7 +79,7 @@ export default async function AppointmentPage({
           [
             t(locale, "Visit type", "نوع الزيارة"),
             a.consultation_type === "video"
-              ? t(locale, "Video consultation", "استشارة فيديو")
+              ? t(locale, "Video consultation", "استشارة بالفيديو")
               : t(locale, "In-person visit", "زيارة في العيادة"),
           ],
           [t(locale, "Location", "الموقع"), a.doctors?.address || "—"],
@@ -94,7 +94,7 @@ export default async function AppointmentPage({
                 overflowWrap: "anywhere",
               }}
             >
-              {value}
+              <bdi>{value}</bdi>
             </span>
           </div>
         ))}

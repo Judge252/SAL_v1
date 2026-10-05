@@ -73,12 +73,12 @@ const statusText: Record<SalVoiceState, [string, string]> = {
   listening: ["Listening…", "أستمع إليك…"],
   thinking: ["Thinking…", "أفكر معك…"],
   speaking: ["SAL is speaking", "سال يتحدث"],
-  recommendation: ["Your next step, together", "خطوتك التالية، معاً"],
+  recommendation: ["Your next step, together", "خطوتك التالية، معًا"],
   muted: [
     "Microphone muted · you can still type",
     "الميكروفون مكتوم · يمكنك الكتابة",
   ],
-  error: ["Let’s try again", "لنحاول مجدداً"],
+  error: ["Let’s try again", "لنحاول مجددًا"],
   ended: [
     "Call ended · your conversation stays here",
     "انتهى الاتصال · محادثتك محفوظة هنا",
@@ -138,12 +138,16 @@ export function SalDoctorRecommendations({
             {t(locale, "Your next step", "خطوتك التالية")}
           </span>
           <h2>
-            {t(locale, "Care to explore, together.", "رعاية نستكشفها معاً.")}
+            {t(
+              locale,
+              "Care to explore, together.",
+              "لنجد الرعاية المناسبة معًا.",
+            )}
           </h2>
         </div>
         <Link href="/doctors" className="text-link">
           {t(locale, "View all", "عرض الكل")}
-          <ArrowUpRight size={16} />
+          <ArrowUpRight size={16} className="directional" />
         </Link>
       </div>
       <div className="doctor-grid">
@@ -218,7 +222,7 @@ export function SalVoiceExperience({
     >
       <section
         className="voice-stage"
-        aria-label={t(locale, "Talk to SAL", "تحدث مع سال")}
+        aria-label={t(locale, "Talk to SAL", "تحدّث مع سال")}
       >
         {!home && (
           <div className="voice-page-actions">
@@ -290,8 +294,8 @@ export function SalVoiceExperience({
         {!live.urgent && (
           <h1>
             {live.messages.length
-              ? t(locale, "I’m here. Let’s talk.", "أنا هنا. لنتحدث.")
-              : t(locale, "Hi, I’m SAL.", "أهلاً، أنا سال.")}
+              ? t(locale, "I’m here. Let’s talk.", "أنا هنا معك. لنتحدّث.")
+              : t(locale, "Hi, I’m SAL.", "مرحبًا، أنا سال.")}{" "}
             <span>
               {t(locale, "Tell me what’s bothering you.", "أخبرني بما يزعجك.")}
             </span>
@@ -340,7 +344,7 @@ export function SalVoiceExperience({
               ) : (
                 <Mic size={30} />
               )}
-              <span>{t(locale, "Talk to SAL", "تحدث مع سال")}</span>
+              <span>{t(locale, "Talk to SAL", "تحدّث مع سال")}</span>
             </button>
           )}
         </div>
@@ -353,7 +357,7 @@ export function SalVoiceExperience({
           >
             <Keyboard size={17} />
             {live.textOpen
-              ? t(locale, "Hide typing", "إخفاء الكتابة")
+              ? t(locale, "Hide typing", "إخفاء المحادثة النصية")
               : t(
                   locale,
                   "Prefer typing? Start text chat",
@@ -382,7 +386,7 @@ export function SalVoiceExperience({
                   void live.sendText(live.pendingText!.message, true)
                 }
               >
-                {t(locale, "Try again", "حاول مجدداً")}
+                {t(locale, "Try again", "حاول مجددًا")}
               </Button>
             )}
           </div>
@@ -393,7 +397,7 @@ export function SalVoiceExperience({
               {t(
                 locale,
                 "Your latest transcript hasn’t saved yet. Keep this page open and try saving again.",
-                "لم يتم حفظ آخر جزء من المحادثة بعد. أبقِ الصفحة مفتوحة وحاول الحفظ مجدداً.",
+                "لم يتم حفظ آخر جزء من المحادثة بعد. أبقِ الصفحة مفتوحة وحاول الحفظ مجددًا.",
               )}
             </p>
             <Button variant="secondary" onClick={() => void live.persist()}>
@@ -404,16 +408,16 @@ export function SalVoiceExperience({
         {captions && !live.urgent && (captionUser || captionSal) && (
           <div
             className="voice-captions"
-            aria-label={t(locale, "Recent exchange", "آخر تبادل")}
+            aria-label={t(locale, "Recent exchange", "آخر جزء من المحادثة")}
           >
             {captionUser && (
-              <p className="voice-caption-user">
+              <p className="voice-caption-user" dir="auto">
                 <small>{t(locale, "You", "أنت")}</small>
                 {captionUser}
               </p>
             )}
             {captionSal && (
-              <p className="sal-message voice-caption-sal">
+              <p className="sal-message voice-caption-sal" dir="auto">
                 <small>SAL</small>
                 {captionSal}
               </p>
@@ -464,12 +468,12 @@ export function SalVoiceExperience({
                 ? t(
                     locale,
                     "Same conversation. SAL will reply with voice.",
-                    "نفس المحادثة. سال سيرد بصوته.",
+                    "المحادثة نفسها، وسيجيبك سال بصوته.",
                   )
                 : t(
                     locale,
                     "Continue by text, or turn on voice whenever you’re ready.",
-                    "تابع بالكتابة، أو شغّل الصوت عندما تكون مستعداً.",
+                    "تابع بالكتابة، أو فعّل الصوت متى كنت مستعدًا.",
                   )}
             </p>
           </div>
@@ -497,7 +501,7 @@ export function SalVoiceExperience({
                   <small>
                     {m.role === "user" ? t(locale, "You", "أنت") : "SAL"}
                   </small>
-                  <p>{m.content}</p>
+                  <p dir="auto">{m.content}</p>
                   {m.structured_data?.sources.map((source) => (
                     <a
                       key={source.id}
@@ -518,7 +522,7 @@ export function SalVoiceExperience({
           {t(
             locale,
             "Care guidance, not a diagnosis. No account needed to talk.",
-            "إرشاد للرعاية، وليس تشخيصاً. لا تحتاج حساباً للتحدث.",
+            "إرشاد للرعاية، وليس تشخيصًا. لا تحتاج إلى حساب لبدء المحادثة.",
           )}
         </p>
         <Link href="/privacy" className="voice-privacy">
@@ -534,7 +538,7 @@ export function SalVoiceExperience({
           </span>
         )}
         {!active && last?.structured_data?.symptomSummary && live.textOpen && (
-          <p className="voice-text-summary">
+          <p className="voice-text-summary" dir="auto">
             {last.structured_data.symptomSummary}
           </p>
         )}

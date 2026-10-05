@@ -222,7 +222,7 @@ async function startCall(page: Page, locale = "en") {
   );
   await page
     .getByRole("button", {
-      name: locale === "ar" ? "تحدث مع سال" : "Talk to SAL",
+      name: locale === "ar" ? "تحدّث مع سال" : "Talk to SAL",
       exact: true,
     })
     .click();
@@ -551,7 +551,7 @@ test("granted site permission with system-blocked capture offers browser recover
     ).toBe("granted");
     await page
       .getByRole("button", {
-        name: locale === "en" ? "Talk to SAL" : "تحدث مع سال",
+        name: locale === "en" ? "Talk to SAL" : "تحدّث مع سال",
         exact: true,
       })
       .click();

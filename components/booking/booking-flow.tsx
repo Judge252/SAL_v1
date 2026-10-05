@@ -100,7 +100,7 @@ export function BookingFlow({
             t(
               locale,
               "That time is no longer available, and we couldn’t reload appointment times. Refresh this page to try again.",
-              "هذا الموعد لم يعد متاحاً، وتعذر تحديث المواعيد. حدّث الصفحة للمحاولة مجدداً.",
+              "هذا الموعد لم يعد متاحًا، وتعذر تحديث المواعيد. حدّث الصفحة للمحاولة مجددًا.",
             ),
           );
         }
@@ -132,19 +132,23 @@ export function BookingFlow({
         <div className="summary-row">
           <span>{t(locale, "Doctor", "الطبيب")}</span>
           <span>
-            {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+            <bdi lang={locale === "ar" && doctor.name_ar ? "ar" : "en"}>
+              {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+            </bdi>
           </span>
         </div>
         <div className="summary-row">
           <span>{t(locale, "Appointment", "الموعد")}</span>
           <span>
-            {dateLabel(appointment.start_at, locale, {
-              weekday: "short",
-              day: "numeric",
-              month: "long",
-              hour: "numeric",
-              minute: "2-digit",
-            })}
+            <bdi>
+              {dateLabel(appointment.start_at, locale, {
+                weekday: "short",
+                day: "numeric",
+                month: "long",
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </bdi>
           </span>
         </div>
         <div className="summary-row">
@@ -218,19 +222,25 @@ export function BookingFlow({
                         }}
                       >
                         <span>
-                          {dateLabel(representative.start_at, locale, {
-                            weekday: "short",
-                          })}
+                          <bdi>
+                            {dateLabel(representative.start_at, locale, {
+                              weekday: "short",
+                            })}
+                          </bdi>
                         </span>
                         <strong>
-                          {dateLabel(representative.start_at, locale, {
-                            day: "numeric",
-                          })}
+                          <bdi>
+                            {dateLabel(representative.start_at, locale, {
+                              day: "numeric",
+                            })}
+                          </bdi>
                         </strong>
                         <span>
-                          {dateLabel(representative.start_at, locale, {
-                            month: "short",
-                          })}
+                          <bdi>
+                            {dateLabel(representative.start_at, locale, {
+                              month: "short",
+                            })}
+                          </bdi>
                         </span>
                       </button>
                     );
@@ -250,10 +260,12 @@ export function BookingFlow({
                         aria-pressed={selected === s.id}
                         onClick={() => setSelected(s.id)}
                       >
-                        {dateLabel(s.start_at, locale, {
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
+                        <bdi>
+                          {dateLabel(s.start_at, locale, {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </bdi>
                         {s.consultation_type === "video" &&
                           ` · ${t(locale, "Video", "فيديو")}`}
                       </button>
@@ -263,7 +275,7 @@ export function BookingFlow({
                   {t(
                     locale,
                     "All times are in Cairo time. Availability is checked again when you confirm.",
-                    "جميع المواعيد بتوقيت القاهرة. يُتحقق من إتاحة الموعد مجدداً عند التأكيد.",
+                    "جميع المواعيد بتوقيت القاهرة. يُتحقق من إتاحة الموعد مجددًا عند التأكيد.",
                   )}
                 </p>
               </>
@@ -272,12 +284,12 @@ export function BookingFlow({
                 title={t(
                   locale,
                   "No appointment times available.",
-                  "لا يوجد مواعيد متاحة.",
+                  "لا توجد مواعيد متاحة.",
                 )}
                 description={t(
                   locale,
                   "Try another doctor or check back when new availability is added.",
-                  "جرّب طبيباً آخر أو عد عند إضافة مواعيد جديدة.",
+                  "جرّب طبيبًا آخر أو عد عند إضافة مواعيد جديدة.",
                 )}
               >
                 <LinkButton href="/doctors" variant="secondary">
@@ -303,12 +315,12 @@ export function BookingFlow({
                 label={t(
                   locale,
                   "What would you like help with?",
-                  "بماذا تريد المساعدة؟",
+                  "ما الذي تودّ مناقشته مع الطبيب؟",
                 )}
                 hint={t(
                   locale,
                   "Share a brief reason for your visit. This is shared with your doctor.",
-                  "اكتب سبباً مختصراً للزيارة. سيُشارك مع طبيبك.",
+                  "اكتب باختصار سبب زيارتك. سيطّلع طبيبك على هذه المعلومات.",
                 )}
               >
                 <textarea
@@ -338,7 +350,9 @@ export function BookingFlow({
             </p>
             <div className="summary-row">
               <span>{t(locale, "Patient", "المريض")}</span>
-              <span>{profile?.name}</span>
+              <span>
+                <bdi>{profile?.name}</bdi>
+              </span>
             </div>
             <div className="summary-row">
               <span>{t(locale, "Reason for visit", "سبب الزيارة")}</span>
@@ -349,7 +363,7 @@ export function BookingFlow({
                   overflowWrap: "anywhere",
                 }}
               >
-                {reason}
+                <bdi>{reason}</bdi>
               </span>
             </div>
             {doctor.is_demo && (
@@ -357,7 +371,7 @@ export function BookingFlow({
                 {t(
                   locale,
                   "This is a development booking with a fictional doctor. It is not a real appointment.",
-                  "هذا حجز للاختبار مع طبيب افتراضي. ليس موعداً حقيقياً.",
+                  "هذا حجز للاختبار مع طبيب افتراضي. ليس موعدًا حقيقيًا.",
                 )}
               </p>
             )}
@@ -385,7 +399,7 @@ export function BookingFlow({
             </Button>
           ) : (
             <Button onClick={() => void book()} loading={busy}>
-              {t(locale, "Confirm appointment", "أكد الموعد")}
+              {t(locale, "Confirm appointment", "أكّد الموعد")}
             </Button>
           )}
         </div>
@@ -401,7 +415,9 @@ export function BookingFlow({
           <DoctorAvatar doctor={doctor} locale={locale} />
           <div>
             <h3>
-              {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+              <bdi lang={locale === "ar" && doctor.name_ar ? "ar" : "en"}>
+                {locale === "ar" ? doctor.name_ar || doctor.name : doctor.name}
+              </bdi>
             </h3>
             <p className="doctor-specialty">
               {doctor.specialties[0]
@@ -421,32 +437,38 @@ export function BookingFlow({
             {t(locale, "When", "الوقت")}
           </span>
           <span>
-            {slot
-              ? dateLabel(slot.start_at, locale, {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                  hour: "numeric",
-                  minute: "2-digit",
-                })
-              : t(locale, "Choose a time", "اختر وقتاً")}
+            <bdi>
+              {slot
+                ? dateLabel(slot.start_at, locale, {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })
+                : t(locale, "Choose a time", "اختر وقتًا")}
+            </bdi>
           </span>
         </div>
         <div className="summary-row">
           <span>{t(locale, "Visit type", "نوع الزيارة")}</span>
           <span>
             {slot?.consultation_type === "video"
-              ? t(locale, "Video consultation", "استشارة فيديو")
+              ? t(locale, "Video consultation", "استشارة بالفيديو")
               : t(locale, "In-person visit", "زيارة في العيادة")}
           </span>
         </div>
         <div className="summary-row">
           <span>{t(locale, "Location", "الموقع")}</span>
-          <span>{doctor.city}</span>
+          <span>
+            <bdi>{doctor.city}</bdi>
+          </span>
         </div>
         <div className="summary-row">
           <span>{t(locale, "Consultation fee", "رسوم الاستشارة")}</span>
-          <span>{money(doctor.price, doctor.currency, locale)}</span>
+          <span>
+            <bdi>{money(doctor.price, doctor.currency, locale)}</bdi>
+          </span>
         </div>
         <p className="time-zone-note">
           {t(
