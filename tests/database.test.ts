@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
 import { vector } from "@electric-sql/pglite/vector";
 import { btree_gist } from "@electric-sql/pglite/contrib/btree_gist";
@@ -10,15 +10,15 @@ test("PostgreSQL migrations enforce ownership, role protection and booking const
     await db.exec(
       `create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create schema storage; grant usage on schema auth to anon,authenticated,service_role; create table auth.users(id uuid primary key,raw_user_meta_data jsonb default '{}'); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]); create table storage.objects(id uuid primary key,bucket_id text); alter table storage.objects enable row level security;`,
     );
+    for (const file of (await readdir("supabase/migrations"))
+      .filter((file) => file.endsWith(".sql"))
+      .sort())
+      await db.exec(await readFile(`supabase/migrations/${file}`, "utf8"));
+    // A rerun must also repair grant drift without failing on the existing helper.
+    await db.exec("grant select(profile_id) on public.clinic_doctors to anon");
     await db.exec(
       await readFile(
-        "supabase/migrations/20261004034459_initial_clinic.sql",
-        "utf8",
-      ),
-    );
-    await db.exec(
-      await readFile(
-        "supabase/migrations/20261004103825_management_functions.sql",
+        "supabase/migrations/20261004234610_restrict_doctor_account_links.sql",
         "utf8",
       ),
     );
@@ -62,6 +62,160 @@ test("PostgreSQL migrations enforce ownership, role protection and booking const
               one,
             ]),
           /permission denied/,
+        );
+        await db.exec("reset role");
+      },
+    );
+    await t.test(
+      "public doctor columns cannot expose linked account IDs",
+      async () => {
+        for (const role of ["anon", "authenticated"]) {
+          await db.exec(
+            `set role ${role}; select set_config('request.jwt.claim.sub','${role === "authenticated" ? one : ""}',false);`,
+          );
+          const doctors = await db.query(
+            "select id,name,name_ar,city from clinic_doctors",
+          );
+          assert.ok(doctors.rows.length > 0);
+          await assert.rejects(
+            () => db.query("select profile_id from clinic_doctors"),
+            /permission denied/,
+          );
+          await assert.rejects(
+            () => db.query("select * from clinic_doctors"),
+            /permission denied/,
+          );
+          const availability = await db.query(
+            "select id from clinic_doctor_availability",
+          );
+          assert.ok(availability.rows.length > 0);
+          await db.exec("reset role");
+        }
+      },
+    );
+    await t.test(
+      "restricted columns preserve doctor ownership reads and updates",
+      async () => {
+        const doctorAccount = "10000000-0000-4000-8000-000000000003";
+        await db.query("insert into auth.users(id) values($1)", [
+          doctorAccount,
+        ]);
+        await db.query("update clinic_profiles set role='doctor' where id=$1", [
+          doctorAccount,
+        ]);
+        const {
+          rows: [own],
+        } = await db.query<{ id: string }>(
+          "update clinic_doctors set profile_id=$1,is_active=false where slug='demo-adam-youssef' returning id",
+          [doctorAccount],
+        );
+        assert.ok(own, "The seeded doctor exists");
+        await db.exec(
+          `set role authenticated; select set_config('request.jwt.claim.sub','${doctorAccount}',false);`,
+        );
+        const ownRows = await db.query(
+          "select id,name from clinic_doctors where id=$1",
+          [own.id],
+        );
+        assert.equal(ownRows.rows.length, 1);
+        const updated = await db.query(
+          "update clinic_doctors set bio='Updated fixture biography' where id=$1 returning id",
+          [own.id],
+        );
+        assert.equal(updated.rows.length, 1);
+        const newSlot = await db.query<{ id: string }>(
+          "insert into clinic_doctor_availability(doctor_id,start_at,end_at,consultation_type) values($1,now()+interval '120 days',now()+interval '120 days 30 minutes','in_person') returning id",
+          [own.id],
+        );
+        assert.equal(newSlot.rows.length, 1);
+        const removed = await db.query(
+          "update clinic_doctor_availability set is_active=false where id=$1 returning id",
+          [newSlot.rows[0].id],
+        );
+        assert.equal(removed.rows.length, 1);
+        const inactiveOwn = await db.query(
+          "select id from clinic_doctor_availability where id=$1",
+          [newSlot.rows[0].id],
+        );
+        assert.equal(inactiveOwn.rows.length, 1);
+        await db.exec(
+          `select set_config('request.jwt.claim.sub','${one}',false);`,
+        );
+        assert.equal(
+          (
+            await db.query("select id from clinic_doctors where id=$1", [
+              own.id,
+            ])
+          ).rows.length,
+          0,
+        );
+        assert.equal(
+          (
+            await db.query(
+              "select id from clinic_doctor_availability where id=$1",
+              [newSlot.rows[0].id],
+            )
+          ).rows.length,
+          0,
+        );
+        assert.equal(
+          (
+            await db.query(
+              "update clinic_doctors set bio='Unauthorized' where id=$1 returning id",
+              [own.id],
+            )
+          ).rows.length,
+          0,
+        );
+        await assert.rejects(
+          () =>
+            db.query(
+              "insert into clinic_doctor_availability(doctor_id,start_at,end_at,consultation_type) values($1,now()+interval '121 days',now()+interval '121 days 30 minutes','in_person')",
+              [own.id],
+            ),
+          /row-level security/,
+        );
+        await db.exec("reset role");
+        await db.query("update clinic_doctors set is_active=true where id=$1", [
+          own.id,
+        ]);
+        const appointment = await db.query<{ id: string }>(
+          "insert into clinic_appointments(patient_id,doctor_id,availability_id,start_at,end_at,reason,consultation_type,status) select $1,doctor_id,id,start_at,end_at,'Ownership test','in_person','cancelled' from clinic_doctor_availability where id=$2 returning id",
+          [one, newSlot.rows[0].id],
+        );
+        await db.exec(
+          `set role authenticated; select set_config('request.jwt.claim.sub','${doctorAccount}',false);`,
+        );
+        assert.equal(
+          (
+            await db.query("select id from clinic_appointments where id=$1", [
+              appointment.rows[0].id,
+            ])
+          ).rows.length,
+          1,
+        );
+        await db.exec(
+          `select set_config('request.jwt.claim.sub','${two}',false);`,
+        );
+        assert.equal(
+          (
+            await db.query("select id from clinic_appointments where id=$1", [
+              appointment.rows[0].id,
+            ])
+          ).rows.length,
+          0,
+        );
+        await db.exec(
+          `select set_config('request.jwt.claim.sub','${one}',false);`,
+        );
+        assert.equal(
+          (
+            await db.query(
+              "select a.id,d.name from clinic_appointments a join clinic_doctors d on d.id=a.doctor_id where a.id=$1",
+              [appointment.rows[0].id],
+            )
+          ).rows.length,
+          1,
         );
         await db.exec("reset role");
       },

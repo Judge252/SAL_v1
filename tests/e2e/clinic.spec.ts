@@ -2,6 +2,7 @@ import { test, expect, type Page, type BrowserContext } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import { readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import { doctorProfileInput } from "../../lib/validation/management";
 const origin = "http://127.0.0.1:3000";
 async function fixture() {
   return JSON.parse(await readFile("work/e2e-fixtures.json", "utf8")) as {
@@ -45,6 +46,178 @@ function monitor(page: Page) {
   page.on("pageerror", (error) => errors.push(error.message));
   return errors;
 }
+test("security: oversized JSON is rejected before changing locale", async ({
+  context,
+}) => {
+  const response = await context.request.post("/api/locale", {
+    headers: { Origin: origin },
+    data: { locale: "ar", padding: "x".repeat(48000) },
+  });
+  expect(response.status()).toBe(413);
+  expect((await response.json()).error).toBe("INPUT_TOO_LARGE");
+});
+
+test("security: private doctor account links stay hidden while doctor edits and patient appointments work", async ({
+  page,
+  context,
+}) => {
+  const errors = monitor(page),
+    f = await fixture(),
+    db = await admin();
+  const { data: doctor, error } = await db
+    .from("clinic_doctors")
+    .select("*")
+    .eq("id", f.doctorId)
+    .single();
+  expect(error).toBeNull();
+  await login(context, "doctor");
+  const updatedBio = "Fictional profile updated during security verification.";
+  const edited = await context.request.post("/api/doctor", {
+    headers: { Origin: origin },
+    data: {
+      action: "profile.update",
+      data: doctorProfileInput.parse({ ...doctor, bio: updatedBio }),
+    },
+  });
+  expect(edited.status()).toBe(200);
+  expect(
+    (
+      await db
+        .from("clinic_doctors")
+        .select("bio")
+        .eq("id", f.doctorId)
+        .single()
+    ).data?.bio,
+  ).toBe(updatedBio);
+  const start_at = new Date(Date.now() + 5 * 86400000).toISOString();
+  const end_at = new Date(Date.parse(start_at) + 1800000).toISOString();
+  const added = await context.request.post("/api/doctor", {
+    headers: { Origin: origin },
+    data: {
+      action: "availability.add",
+      data: { start_at, end_at, consultation_type: "in_person" },
+    },
+  });
+  expect(added.status()).toBe(200);
+  const { data: slot } = await db
+    .from("clinic_doctor_availability")
+    .select("id")
+    .eq("doctor_id", f.doctorId)
+    .eq("start_at", start_at)
+    .single();
+  expect(slot).not.toBeNull();
+  await context.clearCookies();
+  await login(context);
+  const booked = await context.request.post("/api/appointments", {
+    headers: { Origin: origin },
+    data: {
+      slotId: slot!.id,
+      reason: "Fictional security verification appointment.",
+    },
+  });
+  expect(booked.status()).toBe(201);
+  const appointmentId = (await booked.json()).appointment.id;
+  await page.goto("/patient");
+  await expect(page.locator("body")).toContainText(doctor!.name);
+  expect(await page.content()).not.toContain(f.users.doctor.id);
+  await page.goto(`/patient/appointments/${appointmentId}`);
+  await expect(page.locator("body")).toContainText(doctor!.name);
+  expect(await page.content()).not.toContain(f.users.doctor.id);
+  expect(errors).toEqual([]);
+});
+
+for (const locale of ["en", "ar"] as const)
+  test(`booking recovery: failed availability reload clears stale slots (${locale})`, async ({
+    page,
+    context,
+  }) => {
+    const errors = monitor(page),
+      f = await fixture(),
+      db = await admin();
+    const { data: doctor } = await db
+      .from("clinic_doctors")
+      .select("slug")
+      .eq("id", f.doctorId)
+      .single();
+    const start_at = new Date(
+      Date.now() + (locale === "ar" ? 9 : 8) * 86400000,
+    ).toISOString();
+    const end_at = new Date(Date.parse(start_at) + 1800000).toISOString();
+    const { data: slot, error } = await db
+      .from("clinic_doctor_availability")
+      .insert({
+        doctor_id: f.doctorId,
+        start_at,
+        end_at,
+        consultation_type: "in_person",
+      })
+      .select("id")
+      .single();
+    expect(error).toBeNull();
+    await login(context);
+    expect(
+      (
+        await context.request.post("/api/locale", {
+          headers: { Origin: origin },
+          data: { locale },
+        })
+      ).status(),
+    ).toBe(200);
+    await page.route("**/api/appointments", (route) =>
+      route.fulfill({
+        status: 409,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "SLOT_UNAVAILABLE" }),
+      }),
+    );
+    await page.route(`**/api/doctors/${f.doctorId}/availability`, (route) =>
+      route.abort("failed"),
+    );
+    await page.goto(`/booking/${doctor!.slug}?slot=${slot!.id}`);
+    await page
+      .getByLabel(
+        locale === "ar"
+          ? "بماذا تريد المساعدة؟"
+          : "What would you like help with?",
+        { exact: true },
+      )
+      .fill("Fictional failure-recovery test.");
+    await page
+      .getByRole("button", {
+        name: locale === "ar" ? "متابعة" : "Continue",
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole("button", {
+        name: locale === "ar" ? "أكد الموعد" : "Confirm appointment",
+        exact: true,
+      })
+      .click();
+    await expect(page.locator('.error-notice[role="alert"]')).toContainText(
+      locale === "ar" ? "حدّث الصفحة" : "Refresh this page",
+    );
+    await expect(page.locator(".time-option")).toHaveCount(0);
+    await expect(
+      page.getByRole("button", {
+        name: locale === "ar" ? "متابعة" : "Continue",
+        exact: true,
+      }),
+    ).toBeDisabled();
+    expect(errors).toEqual([]);
+    await page.unroute("**/api/appointments");
+    await page.unroute(`**/api/doctors/${f.doctorId}/availability`);
+    await page.reload();
+    await expect(
+      page.getByLabel(
+        locale === "ar"
+          ? "بماذا تريد المساعدة؟"
+          : "What would you like help with?",
+        { exact: true },
+      ),
+    ).toBeVisible();
+  });
+
 test("guest starts a real SAL conversation, resumes booking after login, and finds it in their care space", async ({
   page,
   context,

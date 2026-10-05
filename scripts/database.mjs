@@ -17,11 +17,25 @@ const files = seed
       .filter((f) => f.endsWith(".sql"))
       .sort()
       .map((f) => `supabase/migrations/${f}`);
+// These legacy migrations have explicit probes; new migrations must use tracked
+// Supabase migration tooling or have their own reviewed installation check.
+const installationChecks = {
+  "20261004034459_initial_clinic.sql":
+    "select to_regclass('public.clinic_profiles') is not null as installed",
+  "20261004103825_management_functions.sql":
+    "select to_regprocedure('public.salapp_save_doctor(jsonb,uuid)') is not null and to_regprocedure('public.salapp_save_knowledge(jsonb,jsonb)') is not null as installed",
+  "20261004234610_restrict_doctor_account_links.sql":
+    "select to_regprocedure('clinic_private.owns_doctor(uuid)') is not null and not has_column_privilege('anon','public.clinic_doctors','profile_id','SELECT') and not has_column_privilege('authenticated','public.clinic_doctors','profile_id','SELECT') and has_column_privilege('anon','public.clinic_doctors','name','SELECT') and has_column_privilege('authenticated','public.clinic_doctors','name','SELECT') as installed",
+};
+if (!seed)
+  for (const file of files)
+    if (!Object.hasOwn(installationChecks, path.basename(file)))
+      throw new Error(
+        `Unrecognized migration: ${file}. No SQL was applied. Use Supabase migration tooling or add a reviewed installation check.`,
+      );
 for (const file of files) {
   if (!seed) {
-    const check = file.includes("initial_clinic")
-      ? "select to_regclass('public.clinic_profiles') is not null as installed"
-      : "select exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='salapp_save_doctor') as installed";
+    const check = installationChecks[path.basename(file)];
     const existing = await fetch(
       `https://api.supabase.com/v1/projects/${ref}/database/query`,
       {
@@ -31,9 +45,18 @@ for (const file of files) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ query: check }),
+        signal: AbortSignal.timeout(60000),
       },
     );
-    const result = existing.ok ? await existing.json() : [];
+    if (!existing.ok)
+      throw new Error(
+        `Could not inspect ${file} (HTTP ${existing.status}). Its SQL was not applied.`,
+      );
+    const result = await existing.json();
+    if (typeof result[0]?.installed !== "boolean")
+      throw new Error(
+        `Invalid installation check for ${file}. Its SQL was not applied.`,
+      );
     if (result[0]?.installed) {
       console.log(`Already installed: ${file}`);
       continue;

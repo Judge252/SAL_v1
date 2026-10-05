@@ -1,6 +1,13 @@
 import { z } from "zod";
 export const uuid = z.uuid();
 export const localeSchema = z.enum(["en", "ar"]);
+export const directoryFilters = z.object({
+  q: z.string().max(100).optional(),
+  specialty: z.string().max(80).optional(),
+  city: z.string().max(100).optional(),
+  language: z.string().max(30).optional(),
+  type: z.enum(["in_person", "video"]).optional(),
+});
 export const salInput = z.object({
   message: z.string().trim().min(1).max(2000),
   sessionId: uuid.nullable().optional(),

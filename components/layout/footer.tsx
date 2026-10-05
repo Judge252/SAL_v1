@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/types";
 import { t } from "@/lib/utils";
@@ -7,7 +8,14 @@ export function Footer({ locale }: { locale: Locale }) {
       <div className="container footer-main">
         <div>
           <Link href="/" className="footer-brand">
-            THE CLINIC<span>®</span>
+            <Image
+              src="/logo_dark.png"
+              alt="The Clinic"
+              width={2172}
+              height={724}
+              className="brand-logo"
+              sizes="(max-width: 430px) 120px, 140px"
+            />
           </Link>
           <p>
             {t(

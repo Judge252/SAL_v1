@@ -21,7 +21,11 @@ export async function proxy(request: NextRequest) {
               ...options,
               httpOnly: true,
               sameSite: "lax",
-              secure: (process.env.APP_URL || "").startsWith("https:"),
+              secure: (
+                process.env.APP_URL ||
+                process.env.NEXT_PUBLIC_APP_URL ||
+                ""
+              ).startsWith("https:"),
             }),
           );
           Object.entries(cacheHeaders || {}).forEach(([key, value]) =>

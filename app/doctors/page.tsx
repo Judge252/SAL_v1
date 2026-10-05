@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { z } from "zod";
+import { directoryFilters } from "@/lib/validation";
 import { getDoctors, getSpecialties } from "@/lib/data/doctors";
 import { getLocale } from "@/lib/i18n";
 import { t } from "@/lib/utils";
@@ -11,15 +11,7 @@ export default async function DoctorsPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const [params, locale] = await Promise.all([searchParams, getLocale()]);
-  const parsed = z
-    .object({
-      q: z.string().max(100).optional(),
-      specialty: z.string().max(80).optional(),
-      city: z.string().max(100).optional(),
-      language: z.string().max(30).optional(),
-      type: z.enum(["in_person", "video"]).optional(),
-    })
-    .safeParse(params);
+  const parsed = directoryFilters.safeParse(params);
   const filters = parsed.success ? parsed.data : {};
   const [allDoctors, specialties] = await Promise.all([
     getDoctors(),

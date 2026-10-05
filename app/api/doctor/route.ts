@@ -41,8 +41,7 @@ export async function POST(request: Request) {
       const { error } = await identity.db
         .from("clinic_doctors")
         .update(input.data)
-        .eq("id", doctor.id)
-        .eq("profile_id", identity.user.id);
+        .eq("id", doctor.id);
       if (error) throw new ApiError("PROFILE_UNAVAILABLE", 503);
     }
     if (input.action === "appointment.status") {

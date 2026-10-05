@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -70,13 +71,15 @@ export function Header({
     >
       <div className="container header-inner">
         <Link className="brand" href="/" aria-label="The Clinic home">
-          <span className="brand-symbol" aria-hidden="true">
-            <span />
-          </span>
-          <span>
-            THE CLINIC
-            <small>{t(locale, "CARE, CONNECTED.", "رعاية تبدأ معك.")}</small>
-          </span>
+          <Image
+            src={dark ? "/logo_light.png" : "/logo_dark.png"}
+            alt="The Clinic"
+            width={2172}
+            height={724}
+            className="brand-logo"
+            sizes="(max-width: 360px) 85px, (max-width: 430px) 95px, (max-width: 768px) 105px, 130px"
+            loading="eager"
+          />
         </Link>
         <nav
           className="desktop-nav"

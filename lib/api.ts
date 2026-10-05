@@ -16,8 +16,30 @@ export async function parseBody<T>(
 ): Promise<T> {
   if (!request.headers.get("content-type")?.includes("application/json"))
     throw new ApiError("INVALID_INPUT", 415);
-  const raw = await request.text();
-  if (raw.length > 48000) throw new ApiError("INPUT_TOO_LARGE", 413);
+  const maxBytes = 48000;
+  if (Number(request.headers.get("content-length")) > maxBytes)
+    throw new ApiError("INPUT_TOO_LARGE", 413);
+  const reader = request.body?.getReader();
+  const decoder = new TextDecoder();
+  let raw = "";
+  let bytes = 0;
+  try {
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        bytes += value.byteLength;
+        if (bytes > maxBytes) {
+          await reader.cancel().catch(() => {});
+          throw new ApiError("INPUT_TOO_LARGE", 413);
+        }
+        raw += decoder.decode(value, { stream: true });
+      }
+      raw += decoder.decode();
+    }
+  } finally {
+    reader?.releaseLock();
+  }
   try {
     return schema.parse(JSON.parse(raw));
   } catch {

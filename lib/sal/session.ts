@@ -15,7 +15,11 @@ export async function salOwner(create = true) {
       sameSite: "lax",
       secure:
         process.env.NODE_ENV === "production" &&
-        (process.env.APP_URL || "").startsWith("https:"),
+        (
+          process.env.APP_URL ||
+          process.env.NEXT_PUBLIC_APP_URL ||
+          ""
+        ).startsWith("https:"),
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
     });

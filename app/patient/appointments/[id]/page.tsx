@@ -23,7 +23,9 @@ export default async function AppointmentPage({
   ]);
   const { data, error } = await identity.db
     .from("clinic_appointments")
-    .select("*,doctors:clinic_doctors(*)")
+    .select(
+      "*,doctors:clinic_doctors(id,slug,name,name_ar,bio,bio_ar,photo_url,city,address,languages,years_experience,price,currency,is_verified,is_active,is_demo,consultation_types)",
+    )
     .eq("id", id)
     .eq("patient_id", identity.user.id)
     .maybeSingle();

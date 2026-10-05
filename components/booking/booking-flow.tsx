@@ -87,12 +87,23 @@ export function BookingFlow({
         );
       }
       if (code === "SLOT_UNAVAILABLE" || code === "INVALID_SLOT") {
-        const data = await requestJson<{ slots: Slot[] }>(
-          `/api/doctors/${doctor.id}/availability`,
-          undefined,
-          "GET",
-        );
-        setSlots(data.slots);
+        try {
+          const data = await requestJson<{ slots: Slot[] }>(
+            `/api/doctors/${doctor.id}/availability`,
+            undefined,
+            "GET",
+          );
+          setSlots(data.slots);
+        } catch {
+          setSlots([]);
+          setError(
+            t(
+              locale,
+              "That time is no longer available, and we couldn’t reload appointment times. Refresh this page to try again.",
+              "هذا الموعد لم يعد متاحاً، وتعذر تحديث المواعيد. حدّث الصفحة للمحاولة مجدداً.",
+            ),
+          );
+        }
         setSelected("");
         setStep(0);
       }
