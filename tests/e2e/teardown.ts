@@ -21,6 +21,19 @@ export default async function teardown() {
   const ids = Object.values(
     fixture.users as Record<string, { id: string }>,
   ).map((u) => u.id);
+  if (fixture.photoPaths?.length) {
+    if (
+      fixture.photoPaths.some(
+        (path: string) =>
+          !path.startsWith(`verification/${fixture.run}/${fixture.doctorId}/`),
+      )
+    )
+      throw new Error("Unexpected verification image path; cleanup stopped");
+    const { error } = await admin.storage
+      .from("clinic-doctor-photos")
+      .remove(fixture.photoPaths);
+    if (error) throw new Error("Verification photo cleanup failed");
+  }
   if (fixture.guestSessionIds?.length)
     await admin
       .from("clinic_sal_sessions")
