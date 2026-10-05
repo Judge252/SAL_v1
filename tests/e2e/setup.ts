@@ -65,6 +65,7 @@ export default async function setup() {
         city: "Cairo",
         languages: ["English", "Arabic"],
         is_demo: true,
+        is_active: false,
         consultation_types: ["in_person"],
       })
       .select("id")
@@ -72,11 +73,20 @@ export default async function setup() {
     if (error || !doctor)
       throw new Error("Verification doctor creation failed");
     fixtures.doctorId = doctor.id;
-    await admin.from("clinic_doctor_specialties").insert({
-      doctor_id: doctor.id,
-      specialty_id: specialty!.id,
-      is_primary: true,
-    });
+    const { error: specialtyError } = await admin
+      .from("clinic_doctor_specialties")
+      .insert({
+        doctor_id: doctor.id,
+        specialty_id: specialty!.id,
+        is_primary: true,
+      });
+    if (specialtyError)
+      throw new Error("Verification specialty assignment failed");
+    const { error: publishError } = await admin
+      .from("clinic_doctors")
+      .update({ is_active: true })
+      .eq("id", doctor.id);
+    if (publishError) throw new Error("Verification doctor publication failed");
     await writeFile("work/e2e-fixtures.json", JSON.stringify(fixtures));
   } catch (error) {
     await writeFile("work/e2e-fixtures.json", JSON.stringify(fixtures));

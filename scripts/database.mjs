@@ -26,6 +26,8 @@ const installationChecks = {
     "select to_regprocedure('public.salapp_save_doctor(jsonb,uuid)') is not null and to_regprocedure('public.salapp_save_knowledge(jsonb,jsonb)') is not null as installed",
   "20261004234610_restrict_doctor_account_links.sql":
     "select to_regprocedure('clinic_private.owns_doctor(uuid)') is not null and not has_column_privilege('anon','public.clinic_doctors','profile_id','SELECT') and not has_column_privilege('authenticated','public.clinic_doctors','profile_id','SELECT') and has_column_privilege('anon','public.clinic_doctors','name','SELECT') and has_column_privilege('authenticated','public.clinic_doctors','name','SELECT') as installed",
+  "20261005041330_prepare_admin_doctor_publication.sql":
+    "select exists(select 1 from information_schema.columns where table_schema='public' and table_name='clinic_doctors' and column_name='is_active' and column_default='false') and exists(select 1 from pg_constraint where conrelid='public.clinic_doctors'::regclass and conname='clinic_doctor_publish_fields' and convalidated) and to_regprocedure('clinic_private.check_doctor_publish_specialty()') is not null and to_regprocedure('clinic_private.has_doctor_appointment(uuid)') is not null and (select count(*)=2 from pg_trigger where (tgrelid='public.clinic_doctors'::regclass and tgname='clinic_doctor_publish_specialty' or tgrelid='public.clinic_doctor_specialties'::regclass and tgname='clinic_doctor_specialty_publish_guard') and tgdeferrable and tginitdeferred and tgenabled='O') and exists(select 1 from pg_policies where schemaname='public' and tablename='clinic_doctors' and policyname='clinic_doctors_appointment_history') as installed",
 };
 if (!seed)
   for (const file of files)

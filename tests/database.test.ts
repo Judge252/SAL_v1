@@ -10,10 +10,13 @@ test("PostgreSQL migrations enforce ownership, role protection and booking const
     await db.exec(
       `create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create schema storage; grant usage on schema auth to anon,authenticated,service_role; create table auth.users(id uuid primary key,raw_user_meta_data jsonb default '{}'); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]); create table storage.objects(id uuid primary key,bucket_id text); alter table storage.objects enable row level security;`,
     );
+    const publicationMigration =
+      "20261005041330_prepare_admin_doctor_publication.sql";
     for (const file of (await readdir("supabase/migrations"))
       .filter((file) => file.endsWith(".sql"))
       .sort())
-      await db.exec(await readFile(`supabase/migrations/${file}`, "utf8"));
+      if (file !== publicationMigration)
+        await db.exec(await readFile(`supabase/migrations/${file}`, "utf8"));
     // A rerun must also repair grant drift without failing on the existing helper.
     await db.exec("grant select(profile_id) on public.clinic_doctors to anon");
     await db.exec(
@@ -23,6 +26,25 @@ test("PostgreSQL migrations enforce ownership, role protection and booking const
       ),
     );
     await db.exec(await readFile("supabase/seed.sql", "utf8"));
+    await t.test(
+      "publication migration preserves existing rows and can be applied again",
+      async () => {
+        const snapshot = async () =>
+          (
+            await db.query(
+              "select (select jsonb_agg(d order by id) from clinic_doctors d) as doctors,(select jsonb_agg(s order by id) from clinic_doctor_availability s) as slots",
+            )
+          ).rows;
+        const before = await snapshot();
+        const sql = await readFile(
+          `supabase/migrations/${publicationMigration}`,
+          "utf8",
+        );
+        await db.exec(sql);
+        await db.exec(sql);
+        assert.deepEqual(await snapshot(), before);
+      },
+    );
     const one = "10000000-0000-4000-8000-000000000001",
       two = "10000000-0000-4000-8000-000000000002";
     await db.query(
@@ -43,6 +65,230 @@ test("PostgreSQL migrations enforce ownership, role protection and booking const
       assert.equal(rows.rows.length, 12);
       assert.ok(rows.rows.every((r) => r.relrowsecurity));
     });
+    await t.test(
+      "new doctors stay private until all publication requirements are met",
+      async () => {
+        const {
+          rows: [draft],
+        } = await db.query<{ id: string; is_active: boolean }>(
+          "insert into clinic_doctors(slug,name,is_demo) values('integration-lifecycle-demo','Integration lifecycle doctor (Demo)',true) returning id,is_active",
+        );
+        assert.equal(draft.is_active, false);
+        await db.exec(
+          "set role anon; select set_config('request.jwt.claim.sub','',false)",
+        );
+        assert.equal(
+          (
+            await db.query("select id from clinic_doctors where id=$1", [
+              draft.id,
+            ])
+          ).rows.length,
+          0,
+        );
+        for (const sql of [
+          "insert into clinic_doctors(slug,name) values('unauthorized','Unauthorized')",
+          "update clinic_doctors set is_active=true",
+          "delete from clinic_doctors",
+          "select salapp_save_doctor('{}'::jsonb,null)",
+        ])
+          await assert.rejects(() => db.query(sql), /permission denied/);
+        await db.exec("reset role");
+        await assert.rejects(
+          () =>
+            db.query("update clinic_doctors set is_active=true where id=$1", [
+              draft.id,
+            ]),
+          /clinic_doctor_publish_fields/,
+        );
+        await db.query(
+          "update clinic_doctors set languages=array['English'] where id=$1",
+          [draft.id],
+        );
+        await assert.rejects(
+          () =>
+            db.query("update clinic_doctors set is_active=true where id=$1", [
+              draft.id,
+            ]),
+          /must have a specialty/,
+        );
+        assert.equal(
+          (
+            await db.query<{ is_active: boolean }>(
+              "select is_active from clinic_doctors where id=$1",
+              [draft.id],
+            )
+          ).rows[0].is_active,
+          false,
+        );
+        await db.query(
+          "insert into clinic_doctor_specialties(doctor_id,specialty_id,is_primary) select $1,id,true from clinic_specialties where slug='general-practice'",
+          [draft.id],
+        );
+        await db.query("update clinic_doctors set is_active=true where id=$1", [
+          draft.id,
+        ]);
+        await db.exec("set role anon");
+        assert.equal(
+          (
+            await db.query("select id from clinic_doctors where id=$1", [
+              draft.id,
+            ])
+          ).rows.length,
+          1,
+        );
+        await db.exec("reset role");
+        await assert.rejects(
+          () =>
+            db.query("update clinic_doctors set languages='{}' where id=$1", [
+              draft.id,
+            ]),
+          /clinic_doctor_publish_fields/,
+        );
+      },
+    );
+    await t.test(
+      "the existing save RPC remains atomic and cannot remove a published doctor's final specialty",
+      async () => {
+        await db.exec("set role service_role");
+        const saved = await db.query<{ id: string }>(
+          "select salapp_save_doctor(to_jsonb(d),s.specialty_id) as id from clinic_doctors d join clinic_doctor_specialties s on s.doctor_id=d.id where d.slug='integration-lifecycle-demo'",
+        );
+        assert.ok(saved.rows[0].id);
+        await db.exec("reset role");
+        await assert.rejects(
+          () =>
+            db.query(
+              "delete from clinic_doctor_specialties where doctor_id=$1",
+              [saved.rows[0].id],
+            ),
+          /must have a specialty/,
+        );
+        assert.equal(
+          (
+            await db.query(
+              "select doctor_id from clinic_doctor_specialties where doctor_id=$1",
+              [saved.rows[0].id],
+            )
+          ).rows.length,
+          1,
+        );
+        await db.exec(
+          `set role authenticated; select set_config('request.jwt.claim.sub','${one}',false)`,
+        );
+        await assert.rejects(
+          () => db.query("update clinic_doctors set is_active=true"),
+          /permission denied/,
+        );
+        await assert.rejects(
+          () => db.query("select salapp_save_doctor('{}'::jsonb,null)"),
+          /permission denied/,
+        );
+        await db.exec("reset role");
+      },
+    );
+    await t.test(
+      "archiving preserves only the owning patient's history and blocks new discovery and booking",
+      async () => {
+        const {
+          rows: [doctor],
+        } = await db.query<{ id: string }>(
+          "select id from clinic_doctors where slug='integration-lifecycle-demo'",
+        );
+        const { rows: slots } = await db.query<{ id: string }>(
+          "insert into clinic_doctor_availability(doctor_id,start_at,end_at,consultation_type) select $1,now()+interval '200 days'+n*interval '30 minutes',now()+interval '200 days'+(n+1)*interval '30 minutes','in_person' from generate_series(0,1) n returning id",
+          [doctor.id],
+        );
+        await db.exec(
+          `set role authenticated; select set_config('request.jwt.claim.sub','${one}',false)`,
+        );
+        const {
+          rows: [appointment],
+        } = await db.query<{ id: string }>(
+          "select (clinic_book_appointment($1,'Fictional integration verification')).id",
+          [slots[0].id],
+        );
+        await db.exec("reset role");
+        await db.query(
+          "update clinic_doctors set is_active=false where id=$1",
+          [doctor.id],
+        );
+        for (const [role, user] of [
+          ["anon", ""],
+          ["authenticated", two],
+        ]) {
+          await db.exec(
+            `set role ${role}; select set_config('request.jwt.claim.sub','${user}',false)`,
+          );
+          assert.equal(
+            (
+              await db.query("select id from clinic_doctors where id=$1", [
+                doctor.id,
+              ])
+            ).rows.length,
+            0,
+          );
+          assert.equal(
+            (
+              await db.query(
+                "select doctor_id from clinic_doctor_specialties where doctor_id=$1",
+                [doctor.id],
+              )
+            ).rows.length,
+            0,
+          );
+          assert.equal(
+            (
+              await db.query("select id from clinic_available_slots($1)", [
+                doctor.id,
+              ])
+            ).rows.length,
+            0,
+          );
+          await db.exec("reset role");
+        }
+        await db.exec(
+          `set role authenticated; select set_config('request.jwt.claim.sub','${one}',false)`,
+        );
+        const history = await db.query<{ name: string }>(
+          "select d.name from clinic_appointments a join clinic_doctors d on d.id=a.doctor_id where a.id=$1",
+          [appointment.id],
+        );
+        assert.equal(
+          history.rows[0].name,
+          "Integration lifecycle doctor (Demo)",
+        );
+        assert.equal(
+          (
+            await db.query(
+              "select id from clinic_doctors where id=$1 and is_active",
+              [doctor.id],
+            )
+          ).rows.length,
+          0,
+        );
+        await assert.rejects(
+          () =>
+            db.query(
+              "select clinic_book_appointment($1,'New booking with archived doctor')",
+              [slots[1].id],
+            ),
+          /INVALID_SLOT/,
+        );
+        await db.exec("reset role");
+        assert.equal(
+          (
+            await db.query("select id from clinic_appointments where id=$1", [
+              appointment.id,
+            ])
+          ).rows.length,
+          1,
+        );
+        await db.query("delete from clinic_appointments where id=$1", [
+          appointment.id,
+        ]);
+        await db.query("delete from clinic_doctors where id=$1", [doctor.id]);
+      },
+    );
     await t.test(
       "patients cannot read another profile or promote themselves",
       async () => {
