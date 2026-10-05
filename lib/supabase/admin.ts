@@ -9,7 +9,11 @@ export function adminDb() {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
       fetch: (url, init) =>
-        fetch(url, { ...init, signal: AbortSignal.timeout(15000) }),
+        fetch(url, {
+          ...init,
+          cache: "no-store",
+          signal: AbortSignal.timeout(15000),
+        }),
     },
   });
 }

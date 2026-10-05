@@ -1,9 +1,9 @@
 import "server-only";
 import { adminDb } from "@/lib/supabase/admin";
 import type { Doctor, Slot, Specialty } from "@/types";
-const doctorFields =
-  "id,profile_id,slug,name,name_ar,bio,bio_ar,photo_url,city,address,languages,years_experience,price,currency,is_verified,is_active,is_demo,consultation_types,clinic_doctor_specialties(is_primary,clinic_specialties(*))";
-type RawDoctor = Omit<Doctor, "specialties"> & {
+const specialtyFields = "id,slug,name_en,name_ar,description_en,description_ar";
+const doctorFields = `id,slug,name,name_ar,bio,bio_ar,photo_url,city,address,languages,years_experience,price,currency,is_verified,is_active,is_demo,consultation_types,clinic_doctor_specialties(is_primary,clinic_specialties(${specialtyFields}))`;
+type RawDoctor = Omit<Doctor, "specialties" | "profile_id"> & {
   clinic_doctor_specialties: {
     is_primary: boolean;
     clinic_specialties: Specialty;
@@ -23,7 +23,7 @@ function normalize(row: RawDoctor): Doctor {
 export async function getSpecialties(): Promise<Specialty[]> {
   const { data, error } = await adminDb()
     .from("clinic_specialties")
-    .select("*")
+    .select(specialtyFields)
     .order("name_en");
   if (error) throw new Error("CATALOG_UNAVAILABLE");
   return data || [];
