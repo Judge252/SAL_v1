@@ -120,6 +120,54 @@ export function errorText(code: string, locale: Locale) {
       "Please check the information and try again.",
       "راجع البيانات وحاول مرة أخرى.",
     ],
+    DOCTOR_NAME_INVALID: [
+      "Enter a doctor name between 2 and 100 characters.",
+      "أدخل اسم الطبيب من حرفين إلى 100 حرف.",
+    ],
+    DOCTOR_URL_INVALID: [
+      "Use 3–80 lowercase English letters, numbers or hyphens for the profile URL, with no spaces.",
+      "استخدم من 3 إلى 80 حرفًا إنجليزيًا صغيرًا أو رقمًا أو شرطة في رابط الملف، دون مسافات.",
+    ],
+    DOCTOR_LANGUAGES_REQUIRED: [
+      "Choose at least one language for the doctor.",
+      "اختر لغة واحدة على الأقل للطبيب.",
+    ],
+    DOCTOR_CONSULTATION_REQUIRED: [
+      "Choose at least one consultation type.",
+      "اختر نوع استشارة واحدًا على الأقل.",
+    ],
+    DOCTOR_PRICE_INVALID: [
+      "Enter a price from 0 to 100,000, or leave it blank.",
+      "أدخل سعرًا من 0 إلى 100٬000، أو اتركه فارغًا.",
+    ],
+    DOCTOR_EXPERIENCE_INVALID: [
+      "Enter a whole number from 0 to 80 for experience, or leave it blank.",
+      "أدخل عددًا صحيحًا من 0 إلى 80 لسنوات الخبرة، أو اتركه فارغًا.",
+    ],
+    DOCTOR_PHOTO_INVALID: [
+      "Use a Clinic doctor-photos Supabase Storage URL, or leave the photo blank.",
+      "استخدم رابط صورة من مساحة تخزين صور أطباء ذا كلينك في Supabase، أو اترك الصورة فارغة.",
+    ],
+    DOCTOR_LINK_INVALID: [
+      "Select an available specialty and doctor account, then try again.",
+      "اختر تخصصًا وحساب طبيب متاحين، ثم حاول مرة أخرى.",
+    ],
+    DOCTOR_SLUG_TAKEN: [
+      "Another doctor already uses this profile URL. Choose a different one.",
+      "طبيب آخر يستخدم رابط الملف هذا بالفعل. اختر رابطًا مختلفًا.",
+    ],
+    DOCTOR_ACCOUNT_IN_USE: [
+      "This account is already connected to another doctor. Choose a different account or no connected account.",
+      "هذا الحساب مرتبط بطبيب آخر بالفعل. اختر حسابًا آخر أو دون حساب مرتبط.",
+    ],
+    DOCTOR_HAS_APPOINTMENTS: [
+      "This doctor has appointment history and cannot be deleted. Deactivate the profile to remove it from the directory while keeping appointments.",
+      "هذا الطبيب لديه سجل مواعيد ولا يمكن حذفه. أوقف الملف لإزالته من الدليل مع الاحتفاظ بالمواعيد.",
+    ],
+    DOCTOR_NOT_FOUND: [
+      "This doctor has already been removed. Refresh the page.",
+      "تم حذف هذا الطبيب بالفعل. حدّث الصفحة.",
+    ],
     OAUTH_UNAVAILABLE: [
       "Google sign-in isn’t available right now. You can use email instead.",
       "تسجيل الدخول عبر جوجل غير متاح الآن. يمكنك استخدام البريد.",

@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { useLocale } from "@/components/locale-provider";
 import { Badge, Button, EmptyState, FormField, Modal } from "@/components/ui";
 import { requestJson, errorText } from "@/lib/client";
+import { doctorAdminInput } from "@/lib/validation/management";
 import { t, dateLabel, statusLabel } from "@/lib/utils";
 import type {
   Appointment,
@@ -38,7 +39,7 @@ export function AdminDashboard({
     [tab, setTab] = useState(0),
     [editor, setEditor] = useState<Editor | null>(null),
     [remove, setRemove] = useState<{
-      kind: "specialty" | "knowledge";
+      kind: "doctor" | "specialty" | "knowledge";
       id: string;
       name: string;
     } | null>(null),
@@ -75,32 +76,47 @@ export function AdminDashboard({
     const form = new FormData(e.currentTarget),
       s = (key: string) => String(form.get(key) || ""),
       bool = (key: string) => form.get(key) === "on";
-    if (editor.kind === "doctor")
-      void act({
-        action: "doctor.save",
-        data: {
-          id: editor.record?.id || null,
-          profile_id: s("profile_id") || null,
-          slug: s("slug"),
-          name: s("name"),
-          name_ar: s("name_ar"),
-          bio: s("bio"),
-          bio_ar: s("bio_ar"),
-          city: s("city"),
-          address: s("address"),
-          languages: form.getAll("languages"),
-          price: s("price") === "" ? null : Number(s("price")),
-          currency: s("currency"),
-          years_experience:
-            s("years_experience") === "" ? null : Number(s("years_experience")),
-          photo_url: s("photo_url") || null,
-          consultation_types: form.getAll("consultation_types"),
-          is_active: bool("is_active"),
-          is_verified: bool("is_verified"),
-          is_demo: bool("is_demo"),
-          specialty_id: s("specialty_id"),
-        },
+    if (editor.kind === "doctor") {
+      const parsed = doctorAdminInput.safeParse({
+        id: editor.record?.id || null,
+        profile_id: s("profile_id") || null,
+        slug: s("slug"),
+        name: s("name"),
+        name_ar: s("name_ar"),
+        bio: s("bio"),
+        bio_ar: s("bio_ar"),
+        city: s("city"),
+        address: s("address"),
+        languages: form.getAll("languages"),
+        price: s("price") === "" ? null : Number(s("price")),
+        currency: s("currency"),
+        years_experience:
+          s("years_experience") === "" ? null : Number(s("years_experience")),
+        photo_url: s("photo_url") || null,
+        consultation_types: form.getAll("consultation_types"),
+        is_active: bool("is_active"),
+        is_verified: bool("is_verified"),
+        is_demo: bool("is_demo"),
+        specialty_id: s("specialty_id"),
       });
+      if (!parsed.success) {
+        const field = String(parsed.error.issues[0]?.path[0]);
+        const codes: Record<string, string> = {
+          name: "DOCTOR_NAME_INVALID",
+          slug: "DOCTOR_URL_INVALID",
+          languages: "DOCTOR_LANGUAGES_REQUIRED",
+          consultation_types: "DOCTOR_CONSULTATION_REQUIRED",
+          price: "DOCTOR_PRICE_INVALID",
+          years_experience: "DOCTOR_EXPERIENCE_INVALID",
+          photo_url: "DOCTOR_PHOTO_INVALID",
+          specialty_id: "DOCTOR_LINK_INVALID",
+          profile_id: "DOCTOR_LINK_INVALID",
+        };
+        setError(errorText(codes[field] || "INVALID_INPUT", locale));
+        return;
+      }
+      void act({ action: "doctor.save", data: parsed.data });
+    }
     if (editor.kind === "specialty")
       void act({
         action: "specialty.save",
@@ -320,6 +336,21 @@ export function AdminDashboard({
                               : t(locale, "Verify", "توثيق")}
                           </Button>
                         )}
+                        <Button
+                          variant="ghost"
+                          disabled={busy}
+                          onClick={() => {
+                            setError("");
+                            setRemove({
+                              kind: "doctor",
+                              id: d.id,
+                              name:
+                                locale === "ar" ? d.name_ar || d.name : d.name,
+                            });
+                          }}
+                        >
+                          {t(locale, "Remove doctor", "حذف الطبيب")}
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -516,8 +547,8 @@ export function AdminDashboard({
                   label={t(locale, "Profile URL name", "اسم رابط الملف")}
                   hint={t(
                     locale,
-                    "Lowercase letters, numbers, and hyphens.",
-                    "أحرف إنجليزية صغيرة وأرقام وشرطات.",
+                    "3–80 lowercase English letters, numbers or hyphens; no spaces. Example: ahmed-hassan.",
+                    "من 3 إلى 80 حرفًا إنجليزيًا صغيرًا أو رقمًا أو شرطة، دون مسافات. مثال: ahmed-hassan.",
                   )}
                 >
                   <input
@@ -525,7 +556,10 @@ export function AdminDashboard({
                     name="slug"
                     defaultValue={editor.record?.slug}
                     required
-                    pattern="[a-z0-9-]{3,80}"
+                    pattern={"[a-z0-9\\-]{3,80}"}
+                    onInvalid={() =>
+                      setError(errorText("DOCTOR_URL_INVALID", locale))
+                    }
                     dir="ltr"
                   />
                 </FormField>
@@ -650,6 +684,7 @@ export function AdminDashboard({
                       defaultValue={editor.record?.price ?? ""}
                       min={0}
                       max={100000}
+                      step="0.01"
                     />
                   </FormField>
                   <FormField label={t(locale, "Currency", "العملة")}>
@@ -790,7 +825,7 @@ export function AdminDashboard({
                     className="input"
                     name="slug"
                     defaultValue={editor.record?.slug}
-                    pattern="[a-z0-9-]{3,80}"
+                    pattern={"[a-z0-9\\-]{3,80}"}
                     required
                     dir="ltr"
                   />
@@ -889,11 +924,24 @@ export function AdminDashboard({
       <Modal
         open={!!remove}
         onClose={() => setRemove(null)}
-        title={t(locale, "Remove this record?", "حذف هذا السجل؟")}
+        title={
+          remove?.kind === "doctor"
+            ? t(locale, "Remove this doctor?", "حذف هذا الطبيب؟")
+            : t(locale, "Remove this record?", "حذف هذا السجل؟")
+        }
       >
         <p>
           <bdi>{remove?.name}</bdi>
         </p>
+        {remove?.kind === "doctor" && (
+          <p className="muted mt-4">
+            {t(
+              locale,
+              "This removes the doctor profile and unbooked appointment times. A doctor with appointment history must be deactivated instead.",
+              "سيُحذف ملف الطبيب ومواعيده غير المحجوزة. إذا كان لديه سجل مواعيد، أوقف الملف بدلًا من حذفه.",
+            )}
+          </p>
+        )}
         {error && (
           <p className="error-notice mt-4" role="alert">
             {error}

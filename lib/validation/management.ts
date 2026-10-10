@@ -58,6 +58,7 @@ export const doctorAction = z.discriminatedUnion("action", [
 ]);
 export const adminAction = z.discriminatedUnion("action", [
   z.object({ action: z.literal("doctor.save"), data: doctorAdminInput }),
+  z.object({ action: z.literal("doctor.delete"), id: uuid }),
   z.object({ action: z.literal("specialty.save"), data: specialtyAdminInput }),
   z.object({ action: z.literal("specialty.delete"), id: uuid }),
   z.object({ action: z.literal("knowledge.save"), data: knowledgeInput }),

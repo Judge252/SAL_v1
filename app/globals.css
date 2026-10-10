@@ -2343,6 +2343,7 @@ img {
 }
 .admin-row-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 .admin-table small {

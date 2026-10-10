@@ -21,7 +21,7 @@ export async function POST(request: Request) {
           `${process.env.SUPABASE_URL}/storage/v1/object/public/clinic-doctor-photos/`,
         )
       )
-        throw new ApiError("INVALID_INPUT");
+        throw new ApiError("DOCTOR_PHOTO_INVALID");
       const { data, error } = await db.rpc("salapp_save_doctor", {
         p_data: {
           ...input.data,
@@ -29,12 +29,38 @@ export async function POST(request: Request) {
         },
         p_specialty: input.data.specialty_id,
       });
-      if (error)
-        throw new ApiError(
-          error.code === "23505" ? "CONFLICT" : "INVALID_INPUT",
-          400,
-        );
+      if (error) {
+        if (error.code === "23505")
+          throw new ApiError(
+            error.message.includes("clinic_doctors_slug_key")
+              ? "DOCTOR_SLUG_TAKEN"
+              : "DOCTOR_ACCOUNT_IN_USE",
+            409,
+          );
+        if (
+          error.code === "23503" ||
+          error.message === "INVALID_PROFILE" ||
+          error.message === "INVALID_SPECIALTY"
+        )
+          throw new ApiError("DOCTOR_LINK_INVALID", 400);
+        if (error.code === "23514") throw new ApiError("INVALID_INPUT", 400);
+        console.error("clinic_doctor_save_failed", { code: error.code });
+        throw new ApiError("SERVICE_UNAVAILABLE", 503);
+      }
       return json({ id: data });
+    }
+    if (input.action === "doctor.delete") {
+      const { data, error } = await db
+        .from("clinic_doctors")
+        .delete()
+        .eq("id", input.id)
+        .select("id")
+        .maybeSingle();
+      if (error?.code === "23503")
+        throw new ApiError("DOCTOR_HAS_APPOINTMENTS", 409);
+      if (error) throw new ApiError("SERVICE_UNAVAILABLE", 503);
+      if (!data) throw new ApiError("DOCTOR_NOT_FOUND", 404);
+      return json({ ok: true });
     }
     if (input.action === "specialty.save") {
       const { id, ...values } = input.data;
